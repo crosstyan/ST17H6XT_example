@@ -2,10 +2,12 @@
     INCLUDES
 */
 
+#include <memory>
 #include "bcomdef.h"
 #include "OSAL.h"
 #include "OSAL_PwrMgr.h"
 #include "OSAL_bufmgr.h"
+#include "Include/allocator.h"
 #include "gatt.h"
 #include "ll.h"
 #include "ll_common.h"
@@ -1430,7 +1432,6 @@ static void simpleBLECentral_CharacteristicTest(void) {
 
 static void simpleBLECentral_ReadWriteNotifyTest(void) {
   attWriteReq_t *pReq;
-  //attReadReq_t *pReqread;
 
   if (rwnTestCnt == 0) {
     pReq = reinterpret_cast<attWriteReq_t *>(osal_mem_alloc(sizeof(attWriteReq_t)));
@@ -1444,7 +1445,8 @@ static void simpleBLECentral_ReadWriteNotifyTest(void) {
     osal_mem_free(pReq);
   } else if (rwnTestCnt == 1) {
     for (int i = 0; i < 3; i++) {
-      pReq = reinterpret_cast<attWriteReq_t *>(osal_mem_alloc(sizeof(attWriteReq_t)));
+      auto allocator = OSAL::Allocator<attWriteReq_t>();
+      std::allocator_traits<decltype(allocator)>::construct(allocator, pReq);
       pReq->sig = 0;
       pReq->cmd = TRUE;
       pReq->handle = 0x2f;
@@ -1455,8 +1457,8 @@ static void simpleBLECentral_ReadWriteNotifyTest(void) {
       rwnTestVal[3] = 0;
       rwnTestVal[4] = 0x05;
       osal_memcpy(pReq->value, rwnTestVal, pReq->len);
-      bStatus_t status = GATT_WriteNoRsp(simpleBLEConnHandle, pReq);
-      osal_mem_free(pReq);
+      auto _status = GATT_WriteNoRsp(simpleBLEConnHandle, pReq);
+      std::allocator_traits<decltype(allocator)>::destroy(allocator, pReq);
     }
   }
 

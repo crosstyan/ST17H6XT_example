@@ -5,19 +5,42 @@
 #ifndef SIMPLEBLECENTRAL_ALLOCATOR_H
 #define SIMPLEBLECENTRAL_ALLOCATOR_H
 
-template <class T>
-struct custom_allocator {
-  using value_type = T;
-  custom_allocator() noexcept;
-  template <class U> custom_allocator (const custom_allocator<U>&) noexcept;
-  T* allocate (std::size_t n);
-  void deallocate (T* p, std::size_t n);
+#include "OSAL.h"
+#include <cstddef>
+
+namespace OSAL {
+  template<class T>
+  struct Allocator {
+    using value_type = T;
+
+    Allocator() noexcept;
+
+    template<class U>
+    explicit Allocator(const Allocator<U> &) noexcept {}
+
+    T *allocate(std::size_t n) {
+      return reinterpret_cast<T *>(osal_mem_alloc(n * sizeof(T)));
+    };
+
+    void deallocate(T *p, std::size_t n) {
+      osal_mem_free(p);
+    };
+
+  };
+
+  template<class T>
+  Allocator<T>::Allocator() noexcept = default;
+
+  template<class T, class U>
+  constexpr bool operator==(const Allocator<T> &, const Allocator<U> &) noexcept {
+    return true;
+  };
+
+  template<class T, class U>
+  constexpr bool operator!=(const Allocator<T> &, const Allocator<U> &) noexcept {
+    return false;
+  };
 };
 
-template <class T, class U>
-constexpr bool operator== (const custom_allocator<T>&, const custom_allocator<U>&) noexcept;
-
-template <class T, class U>
-constexpr bool operator!= (const custom_allocator<T>&, const custom_allocator<U>&) noexcept;
 
 #endif //SIMPLEBLECENTRAL_ALLOCATOR_H
