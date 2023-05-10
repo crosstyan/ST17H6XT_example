@@ -76,7 +76,12 @@ set(PROJECT_SOURCE
     ${PROJECT_SOURCE_DIR}/Source/simpleBLECentral.c
     ${PROJECT_SOURCE_DIR}/Source/simpleBLECentral_Main.c)
 
-set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.lib ${SDK_DIRECTORY}/lib/ble_host.lib)
+if(SDK_LIBRARY_NOT_STRIP)
+  # for some reason you have to strip the library to get it to be linked
+  set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.lib ${SDK_DIRECTORY}/lib/ble_host.lib)
+else()
+  set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.strip.lib ${SDK_DIRECTORY}/lib/ble_host.strip.lib)
+endif()
 
 # extra CFLAGS specified in uvprojx 
 

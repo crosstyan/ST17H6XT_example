@@ -1,5 +1,10 @@
 # A Minimal Compilable CMake Project
 
+Sadly this project can't be compiled successfully with GNU Arm Embedded
+Toolchain. There's a caveat that I have no idea how to register ROM
+functions in the linker script so I should just use GNU make with [Arm Compiler for Embedded](https://developer.arm.com/Tools%20and%20Software/Arm%20Compiler%20for%20Embedded)
+and leave alone `CMakeLists.txt` to help [clangd](https://clangd.llvm.org) to do static code analysis.
+
 ```bash
 # specify the toolchain prefix
 # I install it by brew (cask)
