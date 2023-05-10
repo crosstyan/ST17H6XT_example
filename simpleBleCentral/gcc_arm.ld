@@ -106,8 +106,9 @@ SECTIONS
     KEEP(*(.init))
     KEEP(*(.fini))
     /* `--keep=jump_table_base  --keep=global_config` for Arm Compiler? */
-    KEEP(*(jump_table_base))
-    KEEP(*(global_config))
+    /* I should put these symbol into a section, and keep it. */
+    /* KEEP(jump_table_base) */
+    /* KEEP(global_config) */
 
     /* .ctors */
     *crtbegin.o(.ctors)
