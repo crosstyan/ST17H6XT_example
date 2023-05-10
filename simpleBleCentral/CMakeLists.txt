@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_TOOLCHAIN_FILE
-    ${CMAKE_CURRENT_LIST_DIR}/toolchain-arm-none-eabi.cmake)
+        ${CMAKE_CURRENT_LIST_DIR}/toolchain-arm-none-eabi.cmake)
 project(simpleBleCentral)
 enable_language(ASM)
 enable_language(C)
@@ -17,8 +17,6 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)
 set(SDK_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../sdk)
 set(CMSIS_5_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../CMSIS_5)
-set(CXX_STANDARD 17)
-set(C_STANDARD 11)
 
 # Set include path
 include_directories(${SDK_DIRECTORY}/components/inc)
@@ -45,87 +43,93 @@ include_directories(${CMSIS_5_DIRECTORY}/CMSIS/Core/Include)
 include_directories(${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Include)
 
 set(START_SOURCE
-    ${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Source/GCC/startup_ARMCM0.S
-    ${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Source/system_ARMCM0.c)
+        ${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Source/GCC/startup_ARMCM0.S
+        ${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Source/system_ARMCM0.c)
 
 # The need build source path and build all files
 set(SDK_SOURCE
-    ${SDK_DIRECTORY}/components/profiles/DevInfo/devinfoservice.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/gap.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/gapbondmgr.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/gapgattserver.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/peripheral.c
-    ${SDK_DIRECTORY}/components/profiles/Keys/simplekeys.c
-    ${SDK_DIRECTORY}/components/profiles/GATT/gattservapp.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/central.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/observer.c
-    ${SDK_DIRECTORY}/components/driver/clock/clock.c
-    ${SDK_DIRECTORY}/components/driver/pwrmgr/pwrmgr.c
-    ${SDK_DIRECTORY}/components/driver/gpio/gpio.c
-    ${SDK_DIRECTORY}/components/driver/uart/uart.c
-    ${SDK_DIRECTORY}/components/driver/flash/flash.c
-    ${SDK_DIRECTORY}/components/driver/log/my_printf.c
-    ${SDK_DIRECTORY}/components/driver/watchdog/watchdog.c
-    ${SDK_DIRECTORY}/components/osal/snv/osal_snv.c
-    # Don't need file system...
-    ${SDK_DIRECTORY}/components/libraries/fs/fs.c
-    # ${SDK_DIRECTORY}/components/libraries/fs2/fs.c
-    ${SDK_DIRECTORY}/misc/jump_table.c)
+        ${SDK_DIRECTORY}/components/profiles/DevInfo/devinfoservice.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/gap.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/gapbondmgr.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/gapgattserver.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/peripheral.c
+        ${SDK_DIRECTORY}/components/profiles/Keys/simplekeys.c
+        ${SDK_DIRECTORY}/components/profiles/GATT/gattservapp.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/central.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/observer.c
+        ${SDK_DIRECTORY}/components/driver/clock/clock.c
+        ${SDK_DIRECTORY}/components/driver/pwrmgr/pwrmgr.c
+        ${SDK_DIRECTORY}/components/driver/gpio/gpio.c
+        ${SDK_DIRECTORY}/components/driver/uart/uart.c
+        ${SDK_DIRECTORY}/components/driver/flash/flash.c
+        ${SDK_DIRECTORY}/components/driver/log/my_printf.c
+        ${SDK_DIRECTORY}/components/driver/watchdog/watchdog.c
+        ${SDK_DIRECTORY}/components/osal/snv/osal_snv.c
+        # Don't need file system...
+        ${SDK_DIRECTORY}/components/libraries/fs/fs.c
+        # ${SDK_DIRECTORY}/components/libraries/fs2/fs.c
+        ${SDK_DIRECTORY}/misc/jump_table.c)
 
 set(PROJECT_SOURCE
-    ${PROJECT_SOURCE_DIR}/Source/main.c
-    ${PROJECT_SOURCE_DIR}/Source/OSAL_simpleBLECentral.c
-    ${PROJECT_SOURCE_DIR}/Source/simpleBLECentral.c
-    ${PROJECT_SOURCE_DIR}/Source/simpleBLECentral_Main.c)
+        ${PROJECT_SOURCE_DIR}/Source/main.c
+        ${PROJECT_SOURCE_DIR}/Source/OSAL_simpleBLECentral.cpp
+        ${PROJECT_SOURCE_DIR}/Source/simpleBLECentral.c
+        ${PROJECT_SOURCE_DIR}/Source/simpleBLECentral_Main.c)
 
-if(SDK_LIBRARY_NOT_STRIP)
-  # for some reason you have to strip the library to get it to be linked
-  set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.lib ${SDK_DIRECTORY}/lib/ble_host.lib)
-else()
-  set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.strip.lib ${SDK_DIRECTORY}/lib/ble_host.strip.lib)
-endif()
+if (SDK_LIBRARY_NOT_STRIP)
+    # for some reason you have to strip the library to get it to be linked
+    set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.lib ${SDK_DIRECTORY}/lib/ble_host.lib)
+else ()
+    set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.strip.lib ${SDK_DIRECTORY}/lib/ble_host.strip.lib)
+endif ()
 
 # extra CFLAGS specified in uvprojx 
 
 add_compile_definitions(
-  CFG_CP
-  PHY_MCU_TYPE=MCU_BUMBEE_M0
-  MTU_SIZE=247
-  DEBUG_INFO=3
-  CFG_SLEEP_MODE=PWR_MODE_NO_SLEEP
-  MAX_NUM_LL_CONN=1
-  OSAL_CBTIMER_NUM_TASKS=1
-  USE_FS=1
-  GATT_MAX_NUM_CONN=MAX_NUM_LL_CONN+1)
+        CFG_CP
+        PHY_MCU_TYPE=MCU_BUMBEE_M0
+        MTU_SIZE=247
+        DEBUG_INFO=3
+        CFG_SLEEP_MODE=PWR_MODE_NO_SLEEP
+        MAX_NUM_LL_CONN=1
+        OSAL_CBTIMER_NUM_TASKS=1
+        USE_FS=1
+        GATT_MAX_NUM_CONN=MAX_NUM_LL_CONN+1)
 
 # Generate the target
 add_executable(${CMAKE_PROJECT_NAME}.elf ${START_SOURCE} ${PROJECT_SOURCE}
-                                         ${SDK_SOURCE})
+        ${SDK_SOURCE})
+
+set_target_properties(${CMAKE_PROJECT_NAME}.elf PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
+        C_STANDARD 11
+        C_STANDARD_REQUIRED ON)
 
 # Link the library to the target
 target_link_libraries(${CMAKE_PROJECT_NAME}.elf ${SDK_LIBRARY})
 
 # Generate the binary file
 add_custom_target(
-  ${CMAKE_PROJECT_NAME}.bin ALL
-  arm-none-eabi-objcopy -Obinary
-  "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
-  "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.bin"
-  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
+        ${CMAKE_PROJECT_NAME}.bin ALL
+        arm-none-eabi-objcopy -Obinary
+        "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
+        "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.bin"
+        DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
 
 # Generate the hex file
 add_custom_target(
-  ${CMAKE_PROJECT_NAME}.hex ALL
-  arm-none-eabi-objcopy -Oihex
-  "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
-  "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.hex"
-  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
+        ${CMAKE_PROJECT_NAME}.hex ALL
+        arm-none-eabi-objcopy -Oihex
+        "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
+        "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.hex"
+        DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
 
 # Echo the size Infomation
 add_custom_target(
-  size ALL
-  arm-none-eabi-size "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
-  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
+        size ALL
+        arm-none-eabi-size "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
+        DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
 
 # Make clean-all
 add_custom_target(clean-all COMMAND rm -rf ${CMAKE_BINARY_DIR}/*)

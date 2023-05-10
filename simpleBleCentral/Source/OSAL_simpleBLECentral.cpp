@@ -47,9 +47,16 @@
 /* Application */
 #include "simpleBLECentral.h"
 
+// a hack to make the parser happy though I have no idea where
+// the parenthesis is missing
+# ifdef __cplusplus
+}}
+# endif
+
 /*********************************************************************
     GLOBAL VARIABLES
 */
+
 
 // The order in this table must be identical to the task initialization calls below in osalInitTask.
 const pTaskEventHandlerFn tasksArr[] =
