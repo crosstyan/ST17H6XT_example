@@ -41,6 +41,7 @@ include_directories(${SDK_DIRECTORY}/misc)
 include_directories(${SDK_DIRECTORY}/components/libraries/fs)
 include_directories(${CMSIS_5_DIRECTORY}/CMSIS/Core/Include)
 include_directories(${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Include)
+include_directories(Source/Include)
 
 set(START_SOURCE
         ${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Source/GCC/startup_ARMCM0.S
@@ -73,7 +74,7 @@ set(SDK_SOURCE
 set(PROJECT_SOURCE
         ${PROJECT_SOURCE_DIR}/Source/main.c
         ${PROJECT_SOURCE_DIR}/Source/OSAL_simpleBLECentral.cpp
-        ${PROJECT_SOURCE_DIR}/Source/simpleBLECentral.c
+        ${PROJECT_SOURCE_DIR}/Source/simpleBLECentral.cpp
         ${PROJECT_SOURCE_DIR}/Source/simpleBLECentral_Main.c)
 
 if (SDK_LIBRARY_NOT_STRIP)
