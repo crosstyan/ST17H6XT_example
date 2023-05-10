@@ -94,4 +94,8 @@ typedef enum IRQn
 #error "undefine mcu type"
 #endif
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif

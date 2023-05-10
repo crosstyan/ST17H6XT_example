@@ -846,5 +846,8 @@ typedef struct
 #define IRQ_PRIO_THREAD       3
 #define IRQ_PRIO_APP          3
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
