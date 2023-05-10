@@ -33,6 +33,7 @@ endif()
 set(TOOLCHAIN_BIN_DIR ${TOOLCHAIN_PREFIX}/bin)
 set(TOOLCHAIN_INC_DIR ${TOOLCHAIN_PREFIX}/${TOOLCHAIN}/include)
 set(TOOLCHAIN_LIB_DIR ${TOOLCHAIN_PREFIX}/${TOOLCHAIN}/lib)
+set(SDK_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../sdk)
 
 # Set system depended extensions
 if(WIN32)
@@ -62,8 +63,8 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 # I build for Cortex-M0, so I use -mtune=cortex-m0 -mcpu=cortex-m0
 set(OBJECT_GEN_FLAGS "-O0 -mthumb -fno-builtin -Wall -ffunction-sections -fdata-sections -fomit-frame-pointer -mabi=aapcs -mtune=cortex-m0 -mcpu=cortex-m0")
 
-set(CMAKE_C_FLAGS   "${OBJECT_GEN_FLAGS} -std=gnu99 " CACHE INTERNAL "C Compiler options")
-set(CMAKE_CXX_FLAGS "${OBJECT_GEN_FLAGS} -std=c++11 " CACHE INTERNAL "C++ Compiler options")
+set(CMAKE_C_FLAGS   "${OBJECT_GEN_FLAGS}" CACHE INTERNAL "C Compiler options")
+set(CMAKE_CXX_FLAGS "${OBJECT_GEN_FLAGS}" CACHE INTERNAL "C++ Compiler options")
 set(CMAKE_ASM_FLAGS "${OBJECT_GEN_FLAGS} -x assembler-with-cpp " CACHE INTERNAL "ASM Compiler options")
 
 
@@ -72,7 +73,8 @@ set(CMAKE_ASM_FLAGS "${OBJECT_GEN_FLAGS} -x assembler-with-cpp " CACHE INTERNAL 
 # --specs=nosys.specs   No syscalls, provide empty implementations for the POSIX system calls.
 #
 # linker script is set here
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections --specs=nosys.specs --specs=nano.specs -mabi=aapcs -Wl,-Map=\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map\" -mcpu=cortex-m0 -mthumb -T ${CMAKE_SOURCE_DIR}/memory.ld" CACHE INTERNAL "Linker options")
+# to link symbols (--just-symbols) you just need to append the symbols file to linker
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections --specs=nosys.specs --specs=nano.specs -mabi=aapcs -Wl,-Map=\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map\" -mcpu=cortex-m0 -mthumb -T ${CMAKE_SOURCE_DIR}/gcc_arm.ld  \"${SDK_DIRECTORY}/misc/bb_rom_sym_m0.gdbsym\"" CACHE INTERNAL "Linker options")
 
 #---------------------------------------------------------------------------------------
 # Set debug/release build configuration Options

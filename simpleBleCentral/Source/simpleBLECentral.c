@@ -1472,7 +1472,6 @@ static void simpleBLEGATTDiscoveryEvent( gattMsgEvent_t* pMsg )
 
     @return  none
 */
-#if 0
 static void simpleBLECentral_CharacteristicTest(void)
 {
     attWriteReq_t* pReq;
@@ -1605,7 +1604,7 @@ static void simpleBLECentral_CharacteristicTest(void)
         osal_start_timerEx( simpleBLETaskId, START_CHAR_DATA_TEST,100 );
     }
 }
-#endif
+
 static void simpleBLECentral_ReadWriteNotifyTest(void)
 {
     attWriteReq_t* pReq;

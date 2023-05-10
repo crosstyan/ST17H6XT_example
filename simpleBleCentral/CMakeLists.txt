@@ -17,6 +17,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)
 set(SDK_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../sdk)
 set(CMSIS_5_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../CMSIS_5)
+set(CXX_STANDARD 17)
+set(C_STANDARD 11)
 
 # Set include path
 include_directories(${SDK_DIRECTORY}/components/inc)
@@ -66,7 +68,7 @@ set(SDK_SOURCE
     ${SDK_DIRECTORY}/components/driver/watchdog/watchdog.c
     ${SDK_DIRECTORY}/components/osal/snv/osal_snv.c
     # Don't need file system...
-    # ${SDK_DIRECTORY}/components/libraries/fs/fs.c
+    ${SDK_DIRECTORY}/components/libraries/fs/fs.c
     # ${SDK_DIRECTORY}/components/libraries/fs2/fs.c
     ${SDK_DIRECTORY}/misc/jump_table.c)
 
@@ -124,9 +126,6 @@ add_custom_target(
   size ALL
   arm-none-eabi-size "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
   DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
-
-# Make flash to the board by st-link add_custom_target( flash COMMAND st-flash
-# write ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.bin 0x8000000)
 
 # Make clean-all
 add_custom_target(clean-all COMMAND rm -rf ${CMAKE_BINARY_DIR}/*)
