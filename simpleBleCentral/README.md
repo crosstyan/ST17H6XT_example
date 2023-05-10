@@ -66,3 +66,6 @@ Apparently `bb_rom_sym_m0.txt` is the symbol file but only make sense to Keil uV
 
 Fortunately `bb_rom_sym_m0.gdbsym` is provided (strip the `_symrom_` prefix) and feed it to linker then you're good to go.
 
+### Linker script
+
+TODO
