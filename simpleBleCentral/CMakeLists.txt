@@ -94,6 +94,7 @@ add_compile_definitions(
         MAX_NUM_LL_CONN=1
         OSAL_CBTIMER_NUM_TASKS=1
         USE_FS=1
+        __FPU_PRESENT
         GATT_MAX_NUM_CONN=MAX_NUM_LL_CONN+1)
 
 # Generate the target
