@@ -127,12 +127,12 @@ SECTIONS
   .jump_table :
   {
     KEEP(*(jump_table_mem_area))
-  } > LR_ROM_JT_GC
+  } > LD_ROM_JT_GC
 
   .global_config :
   {
     KEEP(*(global_config_area))
-  } > LR_ROM_JT_GC
+  } > LD_ROM_JT_GC
 
   .rom_xip :
   {
@@ -151,7 +151,6 @@ SECTIONS
     *(simpleblecentral.o)
     *(central.o)
     *(observer.o)
-    *(.o*(_section_xip_code_, _func_xip_code_.*))
   } > LR_ROM_XIP
 
   /*
@@ -222,12 +221,6 @@ SECTIONS
     *(.data)
     *(.data.*)
 
-    . = ALIGN(4)
-    KEEP(*(.jump_table_base))
-    KEEP(*(.global_config))
-
-    KEEP(*(.jcr*))
-    . = ALIGN(4);
     /* All data end */
     __data_end__ = .;
 
