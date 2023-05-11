@@ -18,10 +18,8 @@
 #include "OSAL.h"
 #include "OSAL_Tasks.h"
 
-/* LL */
 #include "ll.h"
 
-/* HCI */
 #include "hci_tl.h"
 
 #if defined ( OSAL_CBTIMER_NUM_TASKS )
@@ -30,22 +28,17 @@
 
 #endif
 
-/* L2CAP */
 #include "l2cap.h"
 
-/* gap */
 #include "gap.h"
 #include "gapbondmgr.h"
 
-/* GATT */
 #include "gatt.h"
 
 #include "gattservapp.h"
 
-/* Profiles */
 #include "central.h"
 
-/* Application */
 #include "simpleBLECentral.h"
 
 /*********************************************************************
