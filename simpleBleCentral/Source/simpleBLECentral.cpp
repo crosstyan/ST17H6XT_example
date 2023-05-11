@@ -202,25 +202,21 @@ void SimpleBLECentral_Init(uint8 task_id) {
             is called to process all events for the task.  Events
             include timers, messages and any other user defined events.
 
-    @param   task_id  - The OSAL assigned task ID.
+    @param   _task_id  - The OSAL assigned task ID. Should NOT be used.
     @param   events - events to process.  This is a bit map and can
                      contain more than one event.
 
     @return  events not processed
 */
-uint16 SimpleBLECentral_ProcessEvent(uint8 task_id, uint16 events) {
-  VOID task_id; // OSAL required parameter that isn't used in this function
-
+uint16 SimpleBLECentral_ProcessEvent(uint8 _task_id, uint16 events) {
   if (events & SYS_EVENT_MSG) {
     uint8 *pMsg;
-
-    if ((pMsg = osal_msg_receive(simpleBLETaskId)) != NULL) {
-      simpleBLECentral_ProcessOSALMsg((osal_event_hdr_t *) pMsg);
-      // Release the OSAL message
+    pMsg = osal_msg_receive(simpleBLETaskId);
+    if (pMsg != nullptr) {
+      simpleBLECentralProcessOSALMsg(reinterpret_cast<osal_event_hdr_t *>(pMsg));
       VOID osal_msg_deallocate(pMsg);
     }
 
-    // return unprocessed events
     return (events ^ SYS_EVENT_MSG);
   }
 
@@ -388,7 +384,7 @@ uint16 SimpleBLECentral_ProcessEvent(uint8 task_id, uint16 events) {
 }
 
 /*********************************************************************
-    @fn      simpleBLECentral_ProcessOSALMsg
+    @fn      simpleBLECentralProcessOSALMsg
 
     @brief   Process an incoming task message.
 
@@ -396,10 +392,10 @@ uint16 SimpleBLECentral_ProcessEvent(uint8 task_id, uint16 events) {
 
     @return  none
 */
-static void simpleBLECentral_ProcessOSALMsg(osal_event_hdr_t *pMsg) {
+static void simpleBLECentralProcessOSALMsg(osal_event_hdr_t *pMsg) {
   switch (pMsg->event) {
     case GATT_MSG_EVENT:
-      simpleBLECentralProcessGATTMsg((gattMsgEvent_t *) pMsg);
+      simpleBLECentralProcessGATTMsg(reinterpret_cast<gattMsgEvent_t *>(pMsg));
       break;
   }
 }

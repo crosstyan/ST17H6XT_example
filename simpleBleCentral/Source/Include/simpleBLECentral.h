@@ -274,7 +274,7 @@ static void simpleBLECentralPasscodeCB(uint8 *deviceAddr, uint16 connectionHandl
 static void simpleBLECentralPairStateCB(uint16 connHandle, uint8 state, uint8 status);
 
 //static void simpleBLECentral_HandleKeys( uint8 shift, uint8 keys );
-static void simpleBLECentral_ProcessOSALMsg(osal_event_hdr_t *pMsg);
+static void simpleBLECentralProcessOSALMsg(osal_event_hdr_t *pMsg);
 
 static void simpleBLEGATTDiscoveryEvent(gattMsgEvent_t *pMsg);
 
@@ -303,7 +303,7 @@ extern "C" {
 extern void SimpleBLECentral_Init(uint8 task_id);
 
 // Task Event Processor for the BLE Application
-extern uint16 SimpleBLECentral_ProcessEvent(uint8 task_id, uint16 events);
+extern uint16 SimpleBLECentral_ProcessEvent(uint8 _task_id, uint16 events);
 
 extern uint32 osal_memory_statics(void);
 

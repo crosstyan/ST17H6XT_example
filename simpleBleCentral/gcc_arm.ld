@@ -27,32 +27,21 @@
  *-------- <<< Use Configuration Wizard in Context Menu >>> -------------------
  */
 
-/*---------------------- Flash Configuration ----------------------------------
-  <h> Flash Configuration
-    <o0> Flash Base Address <0x0-0xFFFFFFFF:8>
-    <o1> Flash Size (in Bytes) <0x0-0xFFFFFFFF:8>
-  </h>
-  -----------------------------------------------------------------------------*/
-__ROM_BASE = 0x10000000;
-__ROM_SIZE = 0x00017FFF; /* 96K */
+__ROM_BASE = 0x11020000;
+__ROM_SIZE = 0x00030000; 
 
-/*--------------------- Embedded RAM Configuration ----------------------------
-  <h> RAM Configuration
-    <o0> RAM Base Address    <0x0-0xFFFFFFFF:8>
-    <o1> RAM Size (in Bytes) <0x0-0xFFFFFFFF:8>
-  </h>
- -----------------------------------------------------------------------------*/
-__RAM_BASE = 0x1FFF0000;
-__RAM_SIZE = 0x00007FFF; /* 32K */
+__ACTUAL_RAM_BASE = 0x1FFF0000;
+__ACTUAL_RAM_SIZE = 0x00008000;
 
-/*--------------------- Stack / Heap Configuration ----------------------------
-  <h> Stack / Heap Configuration
-    <o0> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
-    <o1> Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
-  </h>
-  -----------------------------------------------------------------------------*/
-__STACK_SIZE = 0x00000400;
-__HEAP_SIZE  = 0x00000C00;
+__TABLE_BASE = __ACTUAL_RAM_BASE;
+__TABLE_SIZE = 0x00000800;
+
+__RAM_BASE = __ACTUAL_RAM_BASE + __TABLE_SIZE;
+__RAM_SIZE = __ACTUAL_RAM_SIZE - __TABLE_SIZE ; /* 32K */
+
+/* in Bytes */
+__STACK_SIZE = 0x00000400; /* 1K */
+__HEAP_SIZE  = 0x00000C00; /* 3K */
 
 /*
  *-------------------- <<< end of configuration section >>> -------------------
@@ -62,8 +51,7 @@ MEMORY
 {
   FLASH (rx)  : ORIGIN = __ROM_BASE, LENGTH = __ROM_SIZE
   RAM   (rwx) : ORIGIN = __RAM_BASE, LENGTH = __RAM_SIZE
-  LD_ROM_JT_GC (rx) : ORIGIN = 0x1fff0000, LENGTH = 0x00800
-  LR_ROM_XIP (rx) : ORIGIN = 0x11020000, LENGTH = 0x030000
+  TABLE (rx) : ORIGIN = __TABLE_BASE, LENGTH = __TABLE_SIZE
 }
 
 /* Linker script to place sections and symbol values. Should be used together
@@ -127,18 +115,15 @@ SECTIONS
   .jump_table :
   {
     KEEP(*(jump_table_mem_area))
-  } > LD_ROM_JT_GC
+  } > TABLE
 
   .global_config :
   {
     KEEP(*(global_config_area))
-  } > LD_ROM_JT_GC
+  } > TABLE
 
   .rom_xip :
   {
-    *(libethermind_mesh_models.o)
-    *(libethermind_utils.o)
-    *(libethermind_mesh_core.o)
     *(appl_*.o)
     *(devinfoservice.o)
     *(gatt*.o)
@@ -151,20 +136,8 @@ SECTIONS
     *(simpleblecentral.o)
     *(central.o)
     *(observer.o)
-  } > LR_ROM_XIP
-
-  /*
-   * SG veneers:
-   * All SG veneers are placed in the special output section .gnu.sgstubs. Its start address
-   * must be set, either with the command line option �--section-start� or in a linker script,
-   * to indicate where to place these veneers in memory.
-   */
-/*
-  .gnu.sgstubs :
-  {
-    . = ALIGN(32);
   } > FLASH
-*/
+
   .ARM.extab :
   {
     *(.ARM.extab* .gnu.linkonce.armextab.*)
@@ -186,12 +159,6 @@ SECTIONS
     LONG (__data_start__)
     LONG ((__data_end__ - __data_start__) / 4)
 
-    /* Add each additional data section here */
-/*
-    LONG (__etext2)
-    LONG (__data2_start__)
-    LONG ((__data2_end__ - __data2_start__) / 4)
-*/
     __copy_table_end__ = .;
   } > FLASH
 
@@ -199,11 +166,6 @@ SECTIONS
   {
     . = ALIGN(4);
     __zero_table_start__ = .;
-    /* Add each additional bss section here */
-/*
-    LONG (__bss2_start__)
-    LONG ((__bss2_end__ - __bss2_start__) / 4)
-*/
     __zero_table_end__ = .;
   } > FLASH
 

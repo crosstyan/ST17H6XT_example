@@ -1,0 +1,5 @@
+{
+  "cmake.configureArgs": [
+    "-DTOOLCHAIN_PREFIX=/Applications/ArmGNUToolchain/12.2.mpacbti-rel1/arm-none-eabi/"
+  ]
+}
