@@ -15,7 +15,6 @@
 #include "gapgattserver.h"
 #include "gattservapp.h"
 #include "central.h"
-#include "gapbondmgr.h"
 #include "simpleGATTprofile_ota.h"
 #include "simpleBLECentral.h"
 #include "timer.h"
@@ -26,6 +25,10 @@
 #include "rflib.h"
 #include "clock.h"
 #include "OSAL_Clock.h"
+
+extern "C" {
+#include "gapbondmgr.h"
+}
 /*********************************************************************
     MACROS
 */
@@ -382,9 +385,17 @@ static void simpleBLECentral_DiscoverDevice(void);
 
 static void simpleBLECentral_LinkDevice(void);
 
+extern "C" {
+
 extern uint32 osal_memory_statics(void);
 
 extern uint8 llPermit_ctrl_procedure(uint16 connId);
+
+#if(DEBUG_INFO)
+extern void ll_dbg_show(void);
+#endif
+
+}
 
 static void simpleBLECentral_LinkDevice_Direct(uint8_t p_Type, uint8_t p_addr[]);
 
@@ -1056,7 +1067,6 @@ static void simpleBLECentralEventCB(gapCentralRoleEvent_t *pEvent) {
       }
 
       #if(DEBUG_INFO)
-      extern void ll_dbg_show(void);
       ll_dbg_show();
       #endif
     }
@@ -1082,7 +1092,6 @@ static void simpleBLECentralEventCB(gapCentralRoleEvent_t *pEvent) {
       GAPCentralRole_CancelRssi(0);
       rwnTestCnt = 0;
       #if(DEBUG_INFO)
-      extern void ll_dbg_show(void);
       ll_dbg_show();
       #endif
     }

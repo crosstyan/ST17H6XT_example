@@ -99,8 +99,7 @@ add_compile_definitions(
         GATT_MAX_NUM_CONN=MAX_NUM_LL_CONN+1)
 
 # Generate the target
-add_executable(${CMAKE_PROJECT_NAME}.elf ${START_SOURCE} ${PROJECT_SOURCE}
-        ${SDK_SOURCE})
+add_executable(${CMAKE_PROJECT_NAME}.elf ${START_SOURCE} ${SDK_SOURCE} ${PROJECT_SOURCE})
 
 set_target_properties(${CMAKE_PROJECT_NAME}.elf PROPERTIES
         CXX_STANDARD 17

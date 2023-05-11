@@ -35,7 +35,6 @@
 
 /* gap */
 #include "gap.h"
-#include "gapgattserver.h"
 #include "gapbondmgr.h"
 
 /* GATT */
