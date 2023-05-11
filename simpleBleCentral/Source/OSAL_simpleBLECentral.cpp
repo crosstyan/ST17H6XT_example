@@ -1,8 +1,4 @@
 /**************************************************************************************************
-*******
-**************************************************************************************************/
-
-/**************************************************************************************************
     Filename:       OSAL_simpleBLECentral.c
     Revised:        $Date: 2011-03-03 15:46:41 -0800 (Thu, 03 Mar 2011) $
     Revision:       $Revision: 12 $
@@ -11,40 +7,21 @@
 
 **************************************************************************************************/
 
-/**************************************************************************************************
-                                              INCLUDES
- **************************************************************************************************/
-
 #include "OSAL.h"
 #include "OSAL_Tasks.h"
-
 #include "ll.h"
-
 #include "hci_tl.h"
-
-#if defined ( OSAL_CBTIMER_NUM_TASKS )
-
-#include "osal_cbTimer.h"
-
-#endif
-
 #include "l2cap.h"
-
 #include "gap.h"
 #include "gapbondmgr.h"
-
 #include "gatt.h"
-
 #include "gattservapp.h"
-
 #include "central.h"
-
 #include "simpleBLECentral.h"
 
-/*********************************************************************
-    GLOBAL VARIABLES
-*/
-
+#if defined ( OSAL_CBTIMER_NUM_TASKS )
+#include "osal_cbTimer.h"
+#endif
 
 // The order in this table must be identical to the task initialization calls below in osalInitTask.
 const pTaskEventHandlerFn tasksArr[] =
@@ -68,11 +45,7 @@ const pTaskEventHandlerFn tasksArr[] =
 const uint8 tasksCnt = sizeof(tasksArr) / sizeof(tasksArr[0]);
 uint16 *tasksEvents;
 
-/*********************************************************************
-    FUNCTIONS
- *********************************************************************/
-
-/*********************************************************************
+/**
     @fn      osalInitTasks
 
     @brief   This function invokes the initialization function for each task.
@@ -109,7 +82,3 @@ void osalInitTasks(void) {
   /* Application */
   SimpleBLECentral_Init(taskID);
 }
-
-
-/*********************************************************************
-*********************************************************************/
