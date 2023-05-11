@@ -122,22 +122,6 @@ SECTIONS
     KEEP(*(global_config_area))
   } > TABLE
 
-  .rom_xip :
-  {
-    *(appl_*.o)
-    *(devinfoservice.o)
-    *(gatt*.o)
-    *(gattservapp.o)
-    *(l2cap*.o)
-    *(att*.o)
-    *(linkdb.o)
-    *(sm*.o)
-    *(gap*.o)
-    *(simpleblecentral.o)
-    *(central.o)
-    *(observer.o)
-  } > FLASH
-
   .ARM.extab :
   {
     *(.ARM.extab* .gnu.linkonce.armextab.*)
