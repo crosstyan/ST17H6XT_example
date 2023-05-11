@@ -48,7 +48,7 @@ const uint8_t tasksCnt = std::size(tasksArr);
 uint16_t *tasksEvents;
 
 /**
-    @fn      osalInitTasks
+    @fn      OSAL_InitTasks
 
     @brief   This function invokes the initialization function for each task.
 
@@ -56,7 +56,7 @@ uint16_t *tasksEvents;
 
     @return  none
 */
-void osalInitTasks(void) {
+void OSAL_InitTasks(void) {
   uint8_t taskID = 0;
   tasksEvents = (uint16 *) osal_mem_alloc(sizeof(uint16) * tasksCnt);
   osal_memset(tasksEvents, 0, (sizeof(uint16) * tasksCnt));

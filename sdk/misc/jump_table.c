@@ -342,7 +342,7 @@ static void hard_fault(void)
 const uint32_t* const jump_table_base[256] __attribute__((section("jump_table_mem_area"))) =
 {
     (const uint32_t*)0,                         // 0. write Log
-    (const uint32_t*)osalInitTasks,             // 1. init entry of app
+    (const uint32_t*)OSAL_InitTasks,             // 1. init entry of app
     (const uint32_t*)tasksArr,                  // 2. task list
     (const uint32_t*)& tasksCnt,                // 3. task count
     (const uint32_t*)& tasksEvents,             // 4. task events
