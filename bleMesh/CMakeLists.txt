@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_TOOLCHAIN_FILE
-    ${CMAKE_CURRENT_LIST_DIR}/toolchain-arm-none-eabi.cmake)
+        ${CMAKE_CURRENT_LIST_DIR}/toolchain-arm-none-eabi.cmake)
 project(bleMesh)
 enable_language(ASM)
 enable_language(C)
@@ -42,13 +42,13 @@ include_directories(${SDK_DIRECTORY}/components/ble/hci)
 include_directories(${SDK_DIRECTORY}/components/ble/host)
 include_directories(${SDK_DIRECTORY}/components/osal/include)
 include_directories(
-  ${SDK_DIRECTORY}/components/libraries/tinycrypt-0.2.8/lib/include)
+        ${SDK_DIRECTORY}/components/libraries/tinycrypt-0.2.8/lib/include)
 # ethermind
 include_directories(${SDK_DIRECTORY}/components/ethermind/mesh/export/include)
 include_directories(${SDK_DIRECTORY}/components/ethermind/platforms)
 include_directories(${SDK_DIRECTORY}/components/ethermind/platforms/mesh)
 include_directories(
-  ${SDK_DIRECTORY}/components/ethermind/mesh/export/platforms/ext)
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/platforms/ext)
 include_directories(${SDK_DIRECTORY}/components/ethermind/osal/src/phyos)
 include_directories(${SDK_DIRECTORY}/components/ethermind/mesh/export/bearer)
 include_directories(${SDK_DIRECTORY}/components/ethermind/mesh/export/climodel)
@@ -59,16 +59,16 @@ include_directories(${SDK_DIRECTORY}/components/ethermind/external/crypto/aes)
 include_directories(${SDK_DIRECTORY}/components/ethermind/mesh/export/include)
 include_directories(${SDK_DIRECTORY}/components/ethermind/mesh/export/bearer)
 include_directories(
-  ${SDK_DIRECTORY}/components/ethermind/mesh/export/platforms/ext)
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/platforms/ext)
 include_directories(${SDK_DIRECTORY}/components/ethermind/osal/src/phyos)
 include_directories(${SDK_DIRECTORY}/components/ethermind/utils/include)
 include_directories(${SDK_DIRECTORY}/components/ethermind/mesh/export/appl)
 include_directories(${SDK_DIRECTORY}/components/driver/pwrmgr)
 include_directories(${SDK_DIRECTORY}/components/osal/snv)
 include_directories(
-  ${SDK_DIRECTORY}/components/ethermind/external/crypto/asm_ecdh_p256)
+        ${SDK_DIRECTORY}/components/ethermind/external/crypto/asm_ecdh_p256)
 include_directories(
-  ${SDK_DIRECTORY}/components/ethermind/external/crypto/sha256)
+        ${SDK_DIRECTORY}/components/ethermind/external/crypto/sha256)
 include_directories(${SDK_DIRECTORY}/components/ethermind/lib)
 include_directories(${SDK_DIRECTORY}/components/profiles/aliGenie)
 include_directories(${SDK_DIRECTORY}/components/ethermind/mesh/export/cbtimer)
@@ -82,12 +82,12 @@ include_directories(${SDK_DIRECTORY}/components/libraries/cli)
 include_directories(${SDK_DIRECTORY}/components/ethermind/mesh/export/climodel)
 include_directories(${SDK_DIRECTORY}/components/libraries/fs)
 include_directories(
-  ${SDK_DIRECTORY}/components/ethermind/mesh/export/vendormodel)
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/vendormodel)
 include_directories(
-  ${SDK_DIRECTORY}/components/ethermind/mesh/export/vendormodel/server)
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/vendormodel/server)
 include_directories(${SDK_DIRECTORY}/components/ethermind/platforms)
 include_directories(
-  ${SDK_DIRECTORY}/components/ethermind/platforms/interfaces/crypto)
+        ${SDK_DIRECTORY}/components/ethermind/platforms/interfaces/crypto)
 include_directories(${SDK_DIRECTORY}/components/ethermind/platforms/mesh)
 include_directories(${SDK_DIRECTORY}/components/driver/led_light)
 include_directories(${CMSIS_5_DIRECTORY}/CMSIS/Core/Include)
@@ -95,155 +95,155 @@ include_directories(${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Include)
 include_directories(Source/Include)
 
 set(START_SOURCE
-    ${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Source/GCC/startup_ARMCM0.S
-    ${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Source/system_ARMCM0.c)
+        ${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Source/GCC/startup_ARMCM0.S
+        ${CMSIS_5_DIRECTORY}/Device/ARM/ARMCM0/Source/system_ARMCM0.c)
 
 # The need build source path and build all files
 set(SDK_SOURCE
-    ${SDK_DIRECTORY}/components/profiles/DevInfo/devinfoservice.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/gap.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/gapbondmgr.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/gapgattserver.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/peripheral.c
-    ${SDK_DIRECTORY}/components/profiles/Keys/simplekeys.c
-    ${SDK_DIRECTORY}/components/profiles/GATT/gattservapp.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/central.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/observer.c
-    ${SDK_DIRECTORY}/components/profiles/ota/ota_service.c
-    ${SDK_DIRECTORY}/components/profiles/ota_app/ota_app_service.c
-    ${SDK_DIRECTORY}/components/driver/pwm/pwm.c
-    ${SDK_DIRECTORY}/components/driver/flash/flash.c
-    ${SDK_DIRECTORY}/components/driver/clock/clock.c
-    ${SDK_DIRECTORY}/components/driver/log/my_printf.c
-    ${SDK_DIRECTORY}/components/driver/gpio/gpio.c
-    ${SDK_DIRECTORY}/components/driver/uart/uart.c
-    ${SDK_DIRECTORY}/components/driver/pwrmgr/pwrmgr.c
-    ${SDK_DIRECTORY}/components/libraries/crc16/crc16.c
-    ${SDK_DIRECTORY}/components/profiles/DevInfo/devinfoservice.c
-    ${SDK_DIRECTORY}/components/profiles/GATT/gattservapp.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/gapgattserver.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/gap.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/observer.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/central.c
-    ${SDK_DIRECTORY}/components/profiles/Roles/gapbondmgr.c
-    ${SDK_DIRECTORY}/components/osal/snv/osal_snv.c
-    ${SDK_DIRECTORY}/components/driver/clock/clock.c
-    ${SDK_DIRECTORY}/components/driver/pwrmgr/pwrmgr.c
-    ${SDK_DIRECTORY}/components/driver/gpio/gpio.c
-    ${SDK_DIRECTORY}/components/driver/uart/uart.c
-    ${SDK_DIRECTORY}/components/driver/flash/flash.c
-    ${SDK_DIRECTORY}/components/driver/log/my_printf.c
-    ${SDK_DIRECTORY}/components/driver/watchdog/watchdog.c
-    ${SDK_DIRECTORY}/components/ethermind/external/crypto/sha256/sha256.c
-    ${SDK_DIRECTORY}/components/ethermind/mesh/export/climodel/cli_model.c
-    ${SDK_DIRECTORY}/components/driver/led_light/led_light.c
-    ${SDK_DIRECTORY}/components/ethermind/platforms/EM_platform.c
-    ${SDK_DIRECTORY}/components/ethermind/external/crypto/aes/aes.c
-    ${SDK_DIRECTORY}/components/ethermind/external/crypto/aes/aes-ccm.c
-    ${SDK_DIRECTORY}/components/ethermind/osal/src/phyos/EM_debug.c
-    ${SDK_DIRECTORY}/components/ethermind/osal/src/phyos/EM_os.c
-    ${SDK_DIRECTORY}/components/ethermind/osal/src/phyos/EM_timer.c
-    ${SDK_DIRECTORY}/components/ethermind/platforms/mesh/blebrr_pl.c
-    ${SDK_DIRECTORY}/components/ethermind/platforms/interfaces/crypto/cry.c
-    ${SDK_DIRECTORY}/components/ethermind/mesh/export/bearer/blebrr.c
-    ${SDK_DIRECTORY}/components/ethermind/mesh/export/bearer/blebrr_gatt.c
-    ${SDK_DIRECTORY}/components/ethermind/mesh/export/platforms/ext/MS_common_pl.c
-    ${SDK_DIRECTORY}/components/ethermind/mesh/export/platforms/ext/prov_pl.c
-    ${SDK_DIRECTORY}/components/ethermind/platforms/mesh/mesh_services.c
-    ${SDK_DIRECTORY}/components/ethermind/platforms/mesh/model_state_handler_pl.c
-    ${SDK_DIRECTORY}/components/ethermind/mesh/export/appl/appl_prov.c
-    ${SDK_DIRECTORY}/components/ethermind/mesh/export/common/MS_limit_config.c
-    ${SDK_DIRECTORY}/components/ethermind/mesh/export/access_ps/access_ps.c
-    ${SDK_DIRECTORY}/components/ethermind/mesh/export/vendormodel/server/vendormodel_server.c
-    ${SDK_DIRECTORY}/components/libraries/cli/cliface.c
-    # Don't need file system...
-    ${SDK_DIRECTORY}/components/libraries/fs/fs.c
-    # ${SDK_DIRECTORY}/components/libraries/fs2/fs.c
-    ${SDK_DIRECTORY}/misc/jump_table.c)
+        ${SDK_DIRECTORY}/components/profiles/DevInfo/devinfoservice.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/gap.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/gapbondmgr.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/gapgattserver.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/peripheral.c
+        ${SDK_DIRECTORY}/components/profiles/Keys/simplekeys.c
+        ${SDK_DIRECTORY}/components/profiles/GATT/gattservapp.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/central.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/observer.c
+        ${SDK_DIRECTORY}/components/profiles/ota/ota_service.c
+        ${SDK_DIRECTORY}/components/profiles/ota_app/ota_app_service.c
+        ${SDK_DIRECTORY}/components/driver/pwm/pwm.c
+        ${SDK_DIRECTORY}/components/driver/flash/flash.c
+        ${SDK_DIRECTORY}/components/driver/clock/clock.c
+        ${SDK_DIRECTORY}/components/driver/log/my_printf.c
+        ${SDK_DIRECTORY}/components/driver/gpio/gpio.c
+        ${SDK_DIRECTORY}/components/driver/uart/uart.c
+        ${SDK_DIRECTORY}/components/driver/pwrmgr/pwrmgr.c
+        ${SDK_DIRECTORY}/components/libraries/crc16/crc16.c
+        ${SDK_DIRECTORY}/components/profiles/DevInfo/devinfoservice.c
+        ${SDK_DIRECTORY}/components/profiles/GATT/gattservapp.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/gapgattserver.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/gap.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/observer.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/central.c
+        ${SDK_DIRECTORY}/components/profiles/Roles/gapbondmgr.c
+        ${SDK_DIRECTORY}/components/osal/snv/osal_snv.c
+        ${SDK_DIRECTORY}/components/driver/clock/clock.c
+        ${SDK_DIRECTORY}/components/driver/pwrmgr/pwrmgr.c
+        ${SDK_DIRECTORY}/components/driver/gpio/gpio.c
+        ${SDK_DIRECTORY}/components/driver/uart/uart.c
+        ${SDK_DIRECTORY}/components/driver/flash/flash.c
+        ${SDK_DIRECTORY}/components/driver/log/my_printf.c
+        ${SDK_DIRECTORY}/components/driver/watchdog/watchdog.c
+        ${SDK_DIRECTORY}/components/ethermind/external/crypto/sha256/sha256.c
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/climodel/cli_model.c
+        ${SDK_DIRECTORY}/components/driver/led_light/led_light.c
+        ${SDK_DIRECTORY}/components/ethermind/platforms/EM_platform.c
+        ${SDK_DIRECTORY}/components/ethermind/external/crypto/aes/aes.c
+        ${SDK_DIRECTORY}/components/ethermind/external/crypto/aes/aes-ccm.c
+        ${SDK_DIRECTORY}/components/ethermind/osal/src/phyos/EM_debug.c
+        ${SDK_DIRECTORY}/components/ethermind/osal/src/phyos/EM_os.c
+        ${SDK_DIRECTORY}/components/ethermind/osal/src/phyos/EM_timer.c
+        ${SDK_DIRECTORY}/components/ethermind/platforms/mesh/blebrr_pl.c
+        ${SDK_DIRECTORY}/components/ethermind/platforms/interfaces/crypto/cry.c
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/bearer/blebrr.c
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/bearer/blebrr_gatt.c
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/platforms/ext/MS_common_pl.c
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/platforms/ext/prov_pl.c
+        ${SDK_DIRECTORY}/components/ethermind/platforms/mesh/mesh_services.c
+        ${SDK_DIRECTORY}/components/ethermind/platforms/mesh/model_state_handler_pl.c
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/appl/appl_prov.c
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/common/MS_limit_config.c
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/access_ps/access_ps.c
+        ${SDK_DIRECTORY}/components/ethermind/mesh/export/vendormodel/server/vendormodel_server.c
+        ${SDK_DIRECTORY}/components/libraries/cli/cliface.c
+        # Don't need file system...
+        ${SDK_DIRECTORY}/components/libraries/fs/fs.c
+        # ${SDK_DIRECTORY}/components/libraries/fs2/fs.c
+        ${SDK_DIRECTORY}/misc/jump_table.c)
 
 set(PROJECT_SOURCE
-    ${PROJECT_SOURCE_DIR}/Source/main.c
-    ${PROJECT_SOURCE_DIR}/Source/OSAL_bleMesh.c
-    ${PROJECT_SOURCE_DIR}/Source/bleMesh.c
-    ${PROJECT_SOURCE_DIR}/Source/appl_sample_example_phylight.c
-    ${PROJECT_SOURCE_DIR}/Source/bleMesh_Main.c)
+        ${PROJECT_SOURCE_DIR}/Source/main.c
+        ${PROJECT_SOURCE_DIR}/Source/OSAL_bleMesh.c
+        ${PROJECT_SOURCE_DIR}/Source/bleMesh.c
+        ${PROJECT_SOURCE_DIR}/Source/appl_sample_example_phylight.c
+        ${PROJECT_SOURCE_DIR}/Source/bleMesh_Main.c)
 
-if(SDK_LIBRARY_NOT_STRIP)
-  # for some reason you have to strip the library to get it to be linked
-  set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.lib ${SDK_DIRECTORY}/lib/ble_host.lib)
-else()
-  set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.strip.lib
-                  ${SDK_DIRECTORY}/lib/ble_host.strip.lib)
-endif()
+if (SDK_LIBRARY_NOT_STRIP)
+    # for some reason you have to strip the library to get it to be linked
+    set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.lib ${SDK_DIRECTORY}/lib/ble_host.lib)
+else ()
+    set(SDK_LIBRARY ${SDK_DIRECTORY}/lib/rf.strip.lib
+            ${SDK_DIRECTORY}/lib/ble_host.strip.lib)
+endif ()
 
-if(SDK_LIBRARY_NOT_STRIP)
-  set(ETHERMIND_LIBRARY
-      ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_mesh_core.lib
-      ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_ecdh.lib
-      ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_mesh_models.lib
-      ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_utils.lib
-  )
-else()
-  set(ETHERMIND_LIBRARY
-      ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_mesh_core.strip.lib
-      ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_ecdh.strip.lib
-      ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_mesh_models.strip.lib
-      ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_utils.strip.lib
-  )
-endif()
+if (SDK_LIBRARY_NOT_STRIP)
+    set(ETHERMIND_LIBRARY
+            ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_mesh_core.lib
+            ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_ecdh.lib
+            ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_mesh_models.lib
+            ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_utils.lib
+            )
+else ()
+    set(ETHERMIND_LIBRARY
+            ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_mesh_core.strip.lib
+            ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_ecdh.strip.lib
+            ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_mesh_models.strip.lib
+            ${SDK_DIRECTORY}/components/ethermind/lib/meshlibs/phyos/keil/libethermind_utils.strip.lib
+            )
+endif ()
 
 # extra CFLAGS specified in uvprojx
 
 add_compile_definitions(
-  CFG_CP
-  OSAL_CBTIMER_NUM_TASKS=1
-  MTU_SIZE=247
-  OSALMEM_METRICS=0
-  DEBUG_INFO=1
-  CFG_SLEEP_MODE=PWR_MODE_NO_SLEEP
-  CFG_HEARTBEAT_MODE=0
-  CFG_MESH_FAST_PRO=0
-  PHY_MCU_TYPE=MCU_BUMBEE_M0
-  USE_FS=0
-  MAX_NUM_LL_CONN=1
-  GATT_MAX_NUM_CONN=MAX_NUM_LL_CONN+1)
+        CFG_CP
+        OSAL_CBTIMER_NUM_TASKS=1
+        MTU_SIZE=247
+        OSALMEM_METRICS=0
+        DEBUG_INFO=1
+        CFG_SLEEP_MODE=PWR_MODE_NO_SLEEP
+        CFG_HEARTBEAT_MODE=0
+        CFG_MESH_FAST_PRO=0
+        PHY_MCU_TYPE=MCU_BUMBEE_M0
+        USE_FS=0
+        MAX_NUM_LL_CONN=1
+        GATT_MAX_NUM_CONN=MAX_NUM_LL_CONN+1)
 
 # Generate the target
 add_executable(${CMAKE_PROJECT_NAME}.elf ${START_SOURCE} ${SDK_SOURCE}
-                                         ${PROJECT_SOURCE})
+        ${PROJECT_SOURCE})
 
 set_target_properties(
-  ${CMAKE_PROJECT_NAME}.elf
-  PROPERTIES CXX_STANDARD 17
-             CXX_STANDARD_REQUIRED ON
-             C_STANDARD 11
-             C_STANDARD_REQUIRED ON)
+        ${CMAKE_PROJECT_NAME}.elf
+        PROPERTIES CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
+        C_STANDARD 11
+        C_STANDARD_REQUIRED ON)
 
 # Link the library to the target
 target_link_libraries(${CMAKE_PROJECT_NAME}.elf ${SDK_LIBRARY}
-                      ${ETHERMIND_LIBRARY})
+        ${ETHERMIND_LIBRARY})
 
 # Generate the binary file
 add_custom_target(
-  ${CMAKE_PROJECT_NAME}.bin ALL
-  arm-none-eabi-objcopy -Obinary
-  "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
-  "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.bin"
-  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
+        ${CMAKE_PROJECT_NAME}.bin ALL
+        arm-none-eabi-objcopy -Obinary
+        "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
+        "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.bin"
+        DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
 
 # Generate the hex file
 add_custom_target(
-  ${CMAKE_PROJECT_NAME}.hex ALL
-  arm-none-eabi-objcopy -Oihex
-  "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
-  "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.hex"
-  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
+        ${CMAKE_PROJECT_NAME}.hex ALL
+        arm-none-eabi-objcopy -Oihex
+        "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
+        "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.hex"
+        DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
 
 # Echo the size Infomation
 add_custom_target(
-  size ALL
-  arm-none-eabi-size "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
-  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
+        size ALL
+        arm-none-eabi-size "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf"
+        DEPENDS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}.elf)
 
 # Make clean-all
 add_custom_target(clean-all COMMAND rm -rf ${CMAKE_BINARY_DIR}/*)

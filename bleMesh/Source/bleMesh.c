@@ -84,25 +84,34 @@
 /*********************************************************************
     EXTERNAL FUNCTIONS
 */
-extern void appl_mesh_sample (void);
+extern void appl_mesh_sample(void);
 
 /*********************************************************************
     LOCAL FUNCTIONS
 */
-void blebrr_handle_evt_adv_complete (UINT8 enable);
-void blebrr_handle_evt_adv_report (gapDeviceInfoEvent_t* adv);
-void blebrr_handle_evt_scan_complete (UINT8 enable);
+void blebrr_handle_evt_adv_complete(UINT8 enable);
+
+void blebrr_handle_evt_adv_report(gapDeviceInfoEvent_t *adv);
+
+void blebrr_handle_evt_scan_complete(UINT8 enable);
+
 void bleMesh_GAPMsg_Timeout_Process(void);
 
-API_RESULT blebrr_handle_le_connection_pl(uint16_t  conn_idx, uint16_t  conn_hndl, uint8_t   peer_addr_type, uint8_t*    peer_addr);
-API_RESULT blebrr_handle_le_disconnection_pl(uint16_t  conn_idx, uint16_t  conn_hndl, uint8_t   reason);
+API_RESULT
+blebrr_handle_le_connection_pl(uint16_t conn_idx, uint16_t conn_hndl, uint8_t peer_addr_type, uint8_t *peer_addr);
 
-API_RESULT cli_demo_help(UINT32 argc, UCHAR* argv[]);
+API_RESULT blebrr_handle_le_disconnection_pl(uint16_t conn_idx, uint16_t conn_hndl, uint8_t reason);
 
-static void bleMesh_ProcessOSALMsg( osal_event_hdr_t* pMsg );
-static void bleMesh_ProcessGAPMsg( gapEventHdr_t* pMsg );
-static void bleMesh_ProcessL2CAPMsg( gapEventHdr_t* pMsg );
-static void bleMesh_ProcessGATTMsg( gattMsgEvent_t* pMsg );
+API_RESULT cli_demo_help(UINT32 argc, UCHAR *argv[]);
+
+static void bleMesh_ProcessOSALMsg(osal_event_hdr_t *pMsg);
+
+static void bleMesh_ProcessGAPMsg(gapEventHdr_t *pMsg);
+
+static void bleMesh_ProcessL2CAPMsg(gapEventHdr_t *pMsg);
+
+static void bleMesh_ProcessGATTMsg(gattMsgEvent_t *pMsg);
+
 void bleMesh_uart_init(void);
 
 /*********************************************************************
@@ -120,29 +129,29 @@ static UCHAR bleMesh_DiscCancel = FALSE;             // HZF todo, not use???
 UCHAR cmdstr[64];
 UCHAR cmdlen;
 DECL_CONST CLI_COMMAND cli_cmd_list[] =
-{
-    /* Help */
-    { "help", "Help on this CLI Demo Menu", cli_demo_help },
+    {
+        /* Help */
+        {"help",    "Help on this CLI Demo Menu", cli_demo_help},
 
-    /* Reset */
-    { "reset", "Reset the device", cli_demo_reset },
+        /* Reset */
+        {"reset",   "Reset the device",           cli_demo_reset},
 
-    /* internal status */
-    { "status", "internal status", cli_internal_status },
+        /* internal status */
+        {"status",  "internal status",            cli_internal_status},
 
-    /*display key */
-    { "key", "display key", cli_disp_key },
+        /*display key */
+        {"key",     "display key",                cli_disp_key},
 
-    /*heartbeat set */
-    { "hbeart", "heartbeat set", cli_modelc_config_heartbeat_publication_set },
+        /*heartbeat set */
+        {"hbeart",  "heartbeat set",              cli_modelc_config_heartbeat_publication_set},
 
-    /*AT raw data */
-    { "ATMSH80", "raw data", cli_raw_data },
+        /*AT raw data */
+        {"ATMSH80", "raw data",                   cli_raw_data},
 
-    /*get information */
-    { "ATMSH81", "get information", cli_get_information },
+        /*get information */
+        {"ATMSH81", "get information",            cli_get_information},
 
-};
+    };
 
 /*********************************************************************
     PROFILE CALLBACKS
@@ -166,30 +175,29 @@ DECL_CONST CLI_COMMAND cli_cmd_list[] =
 
     @return  none
 */
-void bleMesh_Init( uint8 task_id )
-{
-    bleMesh_TaskID = task_id;
-    // Register for direct HCI messages
-    //HCI_GAPTaskRegister(bleMesh_TaskID);
-    GAP_ParamsInit (bleMesh_TaskID, (GAP_PROFILE_PERIPHERAL | GAP_PROFILE_CENTRAL));
-    GAP_CentDevMgrInit(0x80);
-    GAP_PeriDevMgrInit();
-    GAP_CentConnRegister();
-    // Set the GAP Characteristics
-    GGS_SetParameter( GGS_DEVICE_NAME_ATT, GAP_DEVICE_NAME_LEN, attDeviceName );
-    // Initialize GATT attributes
-    GGS_AddService( GATT_ALL_SERVICES );            // GAP
-    GATTServApp_AddService( GATT_ALL_SERVICES );    // GATT attributes
-    DevInfo_AddService();                           // Device Information Service
-    GATTServApp_RegisterForMsg(task_id);
-    bleMesh_uart_init();
-    osal_set_event( bleMesh_TaskID, BLEMESH_START_DEVICE_EVT );
-    TRNG_INIT();
-    // For DLE
-    llInitFeatureSet2MPHY(TRUE);
-    llInitFeatureSetDLE(TRUE);
+void bleMesh_Init(uint8 task_id) {
+  bleMesh_TaskID = task_id;
+  // Register for direct HCI messages
+  //HCI_GAPTaskRegister(bleMesh_TaskID);
+  GAP_ParamsInit(bleMesh_TaskID, (GAP_PROFILE_PERIPHERAL | GAP_PROFILE_CENTRAL));
+  GAP_CentDevMgrInit(0x80);
+  GAP_PeriDevMgrInit();
+  GAP_CentConnRegister();
+  // Set the GAP Characteristics
+  GGS_SetParameter(GGS_DEVICE_NAME_ATT, GAP_DEVICE_NAME_LEN, attDeviceName);
+  // Initialize GATT attributes
+  GGS_AddService(GATT_ALL_SERVICES);            // GAP
+  GATTServApp_AddService(GATT_ALL_SERVICES);    // GATT attributes
+  DevInfo_AddService();                           // Device Information Service
+  GATTServApp_RegisterForMsg(task_id);
+  bleMesh_uart_init();
+  osal_set_event(bleMesh_TaskID, BLEMESH_START_DEVICE_EVT);
+  TRNG_INIT();
+  // For DLE
+  llInitFeatureSet2MPHY(TRUE);
+  llInitFeatureSetDLE(TRUE);
 //    HCI_LE_SetDefaultPhyMode(0, 0, 0x01, 0x01);
-    hal_pwrmgr_lock(MOD_USR1);
+  hal_pwrmgr_lock(MOD_USR1);
 }
 
 
@@ -209,91 +217,82 @@ void bleMesh_Init( uint8 task_id )
 */
 
 #if (SDK_VER_CHIP == __DEF_CHIP_QFN32__)
-    #define GPIO_GREEN    P32
-    #define GPIO_BLUE     P33
-    #define GPIO_RED      P31
+#define GPIO_GREEN    P32
+#define GPIO_BLUE     P33
+#define GPIO_RED      P31
 #else
-    #define GPIO_GREEN    P3
-    #define GPIO_BLUE     P7
-    #define GPIO_RED      P2
+#define GPIO_GREEN    P3
+#define GPIO_BLUE     P7
+#define GPIO_RED      P2
 #endif
-static gpio_pin_e led_pins[3] = {GPIO_GREEN,GPIO_BLUE,GPIO_RED};
-uint16 bleMesh_ProcessEvent( uint8 task_id, uint16 events )
-{
-    VOID task_id; // OSAL required parameter that isn't used in this function
+static gpio_pin_e led_pins[3] = {GPIO_GREEN, GPIO_BLUE, GPIO_RED};
 
-    if ( events & SYS_EVENT_MSG )
-    {
-        uint8* pMsg;
+uint16 bleMesh_ProcessEvent(uint8 task_id, uint16 events) {
+  VOID task_id; // OSAL required parameter that isn't used in this function
 
-        if ( (pMsg = osal_msg_receive( bleMesh_TaskID )) != NULL )
-        {
-            bleMesh_ProcessOSALMsg( (osal_event_hdr_t*)pMsg );
-            // Release the OSAL message
-            VOID osal_msg_deallocate( pMsg );
-        }
+  if (events & SYS_EVENT_MSG) {
+    uint8 *pMsg;
 
-        // return unprocessed events
-        return (events ^ SYS_EVENT_MSG);
+    if ((pMsg = osal_msg_receive(bleMesh_TaskID)) != NULL) {
+      bleMesh_ProcessOSALMsg((osal_event_hdr_t *) pMsg);
+      // Release the OSAL message
+      VOID osal_msg_deallocate(pMsg);
     }
 
-    if(events & BLEMESH_LIGHT_PRCESS_EVT)
-    {
-        light_blink_porcess_evt();
-        return (events ^ BLEMESH_LIGHT_PRCESS_EVT);
+    // return unprocessed events
+    return (events ^ SYS_EVENT_MSG);
+  }
+
+  if (events & BLEMESH_LIGHT_PRCESS_EVT) {
+    light_blink_porcess_evt();
+    return (events ^ BLEMESH_LIGHT_PRCESS_EVT);
+  }
+
+  if (events & BLEMESH_START_DEVICE_EVT) {
+    /* Register for GATT Client */
+    GATT_InitClient();
+    GATT_RegisterForInd(bleMesh_TaskID);
+    light_init(led_pins, 3);
+    light_blink_evt_cfg(bleMesh_TaskID, BLEMESH_LIGHT_PRCESS_EVT);
+    CLI_init((CLI_COMMAND *) cli_cmd_list, (sizeof(cli_cmd_list) / sizeof(CLI_COMMAND)));
+    appl_mesh_sample();
+    return (events ^ BLEMESH_START_DEVICE_EVT);
+  }
+
+  if (events & BLEMESH_UART_RX_EVT) {
+    if ('\r' == cmdstr[cmdlen - 1] || '\n' == cmdstr[cmdlen - 1]) {
+      cmdstr[cmdlen - 1] = '\0';
+      printf("%s", cmdstr);
+      CLI_process_line_manual
+          (
+              cmdstr,
+              cmdlen
+          );
+      cmdlen = 0;
     }
 
-    if ( events & BLEMESH_START_DEVICE_EVT )
-    {
-        /* Register for GATT Client */
-        GATT_InitClient();
-        GATT_RegisterForInd(bleMesh_TaskID);
-        light_init(led_pins,3);
-        light_blink_evt_cfg(bleMesh_TaskID,BLEMESH_LIGHT_PRCESS_EVT);
-        CLI_init((CLI_COMMAND*)cli_cmd_list,(sizeof (cli_cmd_list)/sizeof(CLI_COMMAND)));
-        appl_mesh_sample();
-        return ( events ^ BLEMESH_START_DEVICE_EVT );
-    }
+    return (events ^ BLEMESH_UART_RX_EVT);
+  }
 
-    if (events & BLEMESH_UART_RX_EVT)
-    {
-        if ('\r' == cmdstr[cmdlen - 1]||'\n' == cmdstr[cmdlen - 1])
-        {
-            cmdstr[cmdlen - 1] = '\0';
-            printf("%s", cmdstr);
-            CLI_process_line_manual
-            (
-                cmdstr,
-                cmdlen
-            );
-            cmdlen = 0;
-        }
+  if (events & BLEMESH_GAP_SCANENABLED) {
+    if (BLEBRR_STATE_ADV_ENABLED != BLEBRR_GET_STATE())
+      blebrr_handle_evt_scan_complete(0x01);
 
-        return ( events ^ BLEMESH_UART_RX_EVT );
-    }
+    return (events ^ BLEMESH_GAP_SCANENABLED);
+  }
 
-    if (events & BLEMESH_GAP_SCANENABLED)
-    {
-        if(BLEBRR_STATE_ADV_ENABLED != BLEBRR_GET_STATE())
-            blebrr_handle_evt_scan_complete(0x01);
+  if (events & BLEMESH_GAP_TERMINATE) {
+    blebrr_disconnect_pl();
+    return (events ^ BLEMESH_GAP_TERMINATE);
+  }
 
-        return (events ^ BLEMESH_GAP_SCANENABLED);
-    }
+  if (events & BLEMESH_GAP_MSG_EVT) {
+    bleMesh_GAPMsg_Timeout_Process();
+    return (events ^ BLEMESH_GAP_MSG_EVT);
+  }
 
-    if (events & BLEMESH_GAP_TERMINATE)
-    {
-        blebrr_disconnect_pl();
-        return (events ^ BLEMESH_GAP_TERMINATE);
-    }
-
-    if (events & BLEMESH_GAP_MSG_EVT)
-    {
-        bleMesh_GAPMsg_Timeout_Process();
-        return (events ^ BLEMESH_GAP_MSG_EVT);
-    }
-
-    // Discard unknown events
-    return 0;
+  // Discard unknown events
+  return 0;
 }
 
 
@@ -306,431 +305,375 @@ uint16 bleMesh_ProcessEvent( uint8 task_id, uint16 events )
 
     @return  none
 */
-static void bleMesh_ProcessOSALMsg( osal_event_hdr_t* pMsg )
-{
-    switch ( pMsg->event )
-    {
+static void bleMesh_ProcessOSALMsg(osal_event_hdr_t *pMsg) {
+  switch (pMsg->event) {
     case GAP_MSG_EVENT:
-        bleMesh_ProcessGAPMsg( (gapEventHdr_t*)pMsg );
-        break;
+      bleMesh_ProcessGAPMsg((gapEventHdr_t *) pMsg);
+      break;
 
     case L2CAP_SIGNAL_EVENT:
-        bleMesh_ProcessL2CAPMsg( (gapEventHdr_t*)pMsg );
-        break;
+      bleMesh_ProcessL2CAPMsg((gapEventHdr_t *) pMsg);
+      break;
 
     case GATT_MSG_EVENT:
-        bleMesh_ProcessGATTMsg( (gattMsgEvent_t*)pMsg );
-        /* Invoke the Mesh Client GATT Msg Handler */
-        #ifdef BLE_CLIENT_ROLE
-        mesh_client_process_gattMsg((gattMsgEvent_t*)pMsg, bleMesh_TaskID);
-        #endif
-        break;
+      bleMesh_ProcessGATTMsg((gattMsgEvent_t *) pMsg);
+      /* Invoke the Mesh Client GATT Msg Handler */
+      #ifdef BLE_CLIENT_ROLE
+      mesh_client_process_gattMsg((gattMsgEvent_t*)pMsg, bleMesh_TaskID);
+      #endif
+      break;
 
     default:
-        break;
-    }
+      break;
+  }
 }
 
-static void bleMesh_ProcessGATTMsg( gattMsgEvent_t* pMsg )
-{
-    // Process the GATT server message
-    switch ( pMsg->method )
-    {
+static void bleMesh_ProcessGATTMsg(gattMsgEvent_t *pMsg) {
+  // Process the GATT server message
+  switch (pMsg->method) {
     case ATT_EXCHANGE_MTU_RSP:
-        break;
+      break;
 
     default:
-        break;
-    }
+      break;
+  }
 }
 
-static void bleMesh_ProcessL2CAPMsg( gapEventHdr_t* pMsg )
-{
-    l2capSignalEvent_t* pPkt = (l2capSignalEvent_t*)pMsg;
+static void bleMesh_ProcessL2CAPMsg(gapEventHdr_t *pMsg) {
+  l2capSignalEvent_t *pPkt = (l2capSignalEvent_t *) pMsg;
 
-    // Process the Parameter Update Response
-    if ( pPkt->opcode == L2CAP_PARAM_UPDATE_RSP )
-    {
-        l2capParamUpdateRsp_t* pRsp = (l2capParamUpdateRsp_t*)&(pPkt->cmd.updateRsp);
+  // Process the Parameter Update Response
+  if (pPkt->opcode == L2CAP_PARAM_UPDATE_RSP) {
+    l2capParamUpdateRsp_t *pRsp = (l2capParamUpdateRsp_t *) &(pPkt->cmd.updateRsp);
 
-        if (pRsp->result == L2CAP_CONN_PARAMS_ACCEPTED )
-        {
-            printf ("L2CAP Connection Parameter Updated!\r\n");
-        }
+    if (pRsp->result == L2CAP_CONN_PARAMS_ACCEPTED) {
+      printf ("L2CAP Connection Parameter Updated!\r\n");
     }
+  }
 }
 
 extern uint8 llState;
 extern uint8 llSecondaryState;
 
 
-static void bleMesh_ProcessGAPMsg( gapEventHdr_t* pMsg )
-{
-    hciStatus_t ret;
-    gapDeviceInfoEvent_t* dev;
+static void bleMesh_ProcessGAPMsg(gapEventHdr_t *pMsg) {
+  hciStatus_t ret;
+  gapDeviceInfoEvent_t *dev;
 
-    if ((pMsg->hdr.status != SUCCESS)
-            && (pMsg->hdr.status != bleGAPUserCanceled || pMsg->opcode != GAP_DEVICE_DISCOVERY_EVENT))
-    {
+  if ((pMsg->hdr.status != SUCCESS)
+      && (pMsg->hdr.status != bleGAPUserCanceled || pMsg->opcode != GAP_DEVICE_DISCOVERY_EVENT)) {
 //        printf ("GAP Event - %02X, status = %X\r\n", pMsg->opcode, pMsg->hdr.status);
-    }
+  }
 
-    switch (pMsg->opcode)
-    {
-    case GAP_DEVICE_INIT_DONE_EVENT:
-    {
-        gapDeviceInitDoneEvent_t* pPkt = (gapDeviceInitDoneEvent_t*) pMsg;
+  switch (pMsg->opcode) {
+    case GAP_DEVICE_INIT_DONE_EVENT: {
+      gapDeviceInitDoneEvent_t *pPkt = (gapDeviceInitDoneEvent_t *) pMsg;
 
-        if ( pPkt->hdr.status == SUCCESS )
-        {
-            // Save BD Address information in pPkt->devAddr for B_ADDR_LEN
-        }
+      if (pPkt->hdr.status == SUCCESS) {
+        // Save BD Address information in pPkt->devAddr for B_ADDR_LEN
+      }
     }
-    break;
+      break;
 
     case GAP_MAKE_DISCOVERABLE_DONE_EVENT:  //adv start data ready
-        osal_stop_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT);
+      osal_stop_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT);
 
-        if (SUCCESS != pMsg->hdr.status)
-        {
-            ret = GAP_MakeDiscoverable(bleMesh_TaskID, &bleMesh_advparam);
+      if (SUCCESS != pMsg->hdr.status) {
+        ret = GAP_MakeDiscoverable(bleMesh_TaskID, &bleMesh_advparam);
 
-            if (SUCCESS != ret)
-            {
-                printf ("GAP_MakeDiscoverable Failed - %d\r\n", ret);
-            }
-            else
-            {
-                osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10*1000);
-            }
+        if (SUCCESS != ret) {
+          printf ("GAP_MakeDiscoverable Failed - %d\r\n", ret);
+        } else {
+          osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10 * 1000);
         }
-        else
-        {
-            blebrr_handle_evt_adv_complete(1);
-        }
+      } else {
+        blebrr_handle_evt_adv_complete(1);
+      }
 
-        break;
+      break;
 
     case GAP_END_DISCOVERABLE_DONE_EVENT:
-        //printf ("->%d\r\n", pMsg->opcode);
-        //printf ("ED Status - %d", pMsg->hdr.status);
-        osal_stop_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT);
+      //printf ("->%d\r\n", pMsg->opcode);
+      //printf ("ED Status - %d", pMsg->hdr.status);
+      osal_stop_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT);
 
-        if (SUCCESS != pMsg->hdr.status)
-        {
-            ret = GAP_EndDiscoverable(bleMesh_TaskID);
+      if (SUCCESS != pMsg->hdr.status) {
+        ret = GAP_EndDiscoverable(bleMesh_TaskID);
 
-            if (SUCCESS != ret)
-            {
-                printf ("GAP_EndDiscoverable Failed - %d\r\n", ret);
-            }
-            else
-            {
-                osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10*1000);
-            }
+        if (SUCCESS != ret) {
+          printf ("GAP_EndDiscoverable Failed - %d\r\n", ret);
+        } else {
+          osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10 * 1000);
         }
-        else
-        {
-            blebrr_handle_evt_adv_complete(0);
-        }
+      } else {
+        blebrr_handle_evt_adv_complete(0);
+      }
 
-        break;
+      break;
 
     case GAP_DEVICE_DISCOVERY_EVENT:    //scan start/stop
-        if (TRUE == bleMesh_DiscCancel)
-        {
-            osal_stop_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT);
+      if (TRUE == bleMesh_DiscCancel) {
+        osal_stop_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT);
 
-            if ((bleGAPUserCanceled != pMsg->hdr.status) && (SUCCESS != pMsg->hdr.status))
-            {
-                printf ("GAP_DeviceDiscoveryCancel Retry - 0x%02X 0x%02X 0x%02X\r\n", pMsg->hdr.status,llState,llSecondaryState);
-                GAP_DeviceDiscoveryCancel(bleMesh_TaskID);
-                osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10*1000);
-            }
-            else
-            {
-                bleMesh_DiscCancel = FALSE;
-                blebrr_handle_evt_scan_complete(0);
-            }
+        if ((bleGAPUserCanceled != pMsg->hdr.status) && (SUCCESS != pMsg->hdr.status)) {
+          printf ("GAP_DeviceDiscoveryCancel Retry - 0x%02X 0x%02X 0x%02X\r\n", pMsg->hdr.status, llState,
+                  llSecondaryState);
+          GAP_DeviceDiscoveryCancel(bleMesh_TaskID);
+          osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10 * 1000);
+        } else {
+          bleMesh_DiscCancel = FALSE;
+          blebrr_handle_evt_scan_complete(0);
         }
-        else
-        {
-            if (SUCCESS == pMsg->hdr.status)
-            {
-                GAP_DeviceDiscoveryRequest(&bleMesh_scanparam);
-            }
+      } else {
+        if (SUCCESS == pMsg->hdr.status) {
+          GAP_DeviceDiscoveryRequest(&bleMesh_scanparam);
+        }
 //            else if(LL_STATUS_ERROR_UNEXPECTED_STATE_ROLE == pMsg->hdr.status)
-            else if((LL_STATUS_ERROR_UNEXPECTED_STATE_ROLE == pMsg->hdr.status) || (bleMemAllocError == pMsg->hdr.status) )
-            {
-                printf ("GAP_DeviceDiscoveryRequest Retry - 0x%02X\r\n", pMsg->hdr.status);
-                GAP_DeviceDiscoveryRequest(&bleMesh_scanparam);
-            }
+        else if ((LL_STATUS_ERROR_UNEXPECTED_STATE_ROLE == pMsg->hdr.status) ||
+                 (bleMemAllocError == pMsg->hdr.status)) {
+          printf ("GAP_DeviceDiscoveryRequest Retry - 0x%02X\r\n", pMsg->hdr.status);
+          GAP_DeviceDiscoveryRequest(&bleMesh_scanparam);
         }
+      }
 
-        break;
+      break;
 
     case GAP_DEVICE_INFO_EVENT:
-        dev = (gapDeviceInfoEvent_t*)pMsg;
-        blebrr_handle_evt_adv_report(dev);
-        break;
+      dev = (gapDeviceInfoEvent_t *) pMsg;
+      blebrr_handle_evt_adv_report(dev);
+      break;
 
-    case GAP_LINK_ESTABLISHED_EVENT:
-    {
-        osal_stop_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT);
-        blebrr_timer_stop();
-        gapEstLinkReqEvent_t* pPkt = (gapEstLinkReqEvent_t*)pMsg;
-        printf("\r\n GAP_LINK_ESTABLISHED_EVENT received! \r\n");
+    case GAP_LINK_ESTABLISHED_EVENT: {
+      osal_stop_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT);
+      blebrr_timer_stop();
+      gapEstLinkReqEvent_t *pPkt = (gapEstLinkReqEvent_t *) pMsg;
+      printf("\r\n GAP_LINK_ESTABLISHED_EVENT received! \r\n");
 
-        if ( pPkt->hdr.status == SUCCESS )
-        {
-            /* Send Connection Complete to  Ble Bearer PL layer */
-            blebrr_handle_le_connection_pl
+      if (pPkt->hdr.status == SUCCESS) {
+        /* Send Connection Complete to  Ble Bearer PL layer */
+        blebrr_handle_le_connection_pl
             (
                 0x00, /* Dummy Static Connection Index */
                 pPkt->connectionHandle,
                 pPkt->devAddrType,
                 pPkt->devAddr
             );
-        }
+      }
     }
-    break;
+      break;
 
-    case GAP_LINK_TERMINATED_EVENT:
-    {
-        gapTerminateLinkEvent_t* pPkt = (gapTerminateLinkEvent_t*)pMsg;
-        /* printf("\r\n GAP_LINK_TERMINATED_EVENT received! \r\n"); */
-        blebrr_handle_le_disconnection_pl
-        (
-            0x00, /* Dummy Static Connection Index */
-            pPkt->connectionHandle,
-            pPkt->reason
-        );
+    case GAP_LINK_TERMINATED_EVENT: {
+      gapTerminateLinkEvent_t *pPkt = (gapTerminateLinkEvent_t *) pMsg;
+      /* printf("\r\n GAP_LINK_TERMINATED_EVENT received! \r\n"); */
+      blebrr_handle_le_disconnection_pl
+          (
+              0x00, /* Dummy Static Connection Index */
+              pPkt->connectionHandle,
+              pPkt->reason
+          );
     }
-    break;
-    #if 0
+      break;
+      #if 0
 
-    case GAP_LINK_PARAM_UPDATE_EVENT:
-    {
-        gapLinkUpdateEvent_t* pPkt = (gapLinkUpdateEvent_t*)pMsg;
-        l2capParamUpdateReq_t updateReq;
-        uint16 timeout = GAP_GetParamValue( TGAP_CONN_PARAM_TIMEOUT );
-        printf("\r\n GAP_LINK_PARAM_UPDATE_EVENT received! \r\n");
-        updateReq.intervalMin = 0x28;
-        updateReq.intervalMax = 0x38;
-        updateReq.slaveLatency = 0;
-        updateReq.timeoutMultiplier = 0x0c80;
-        L2CAP_ConnParamUpdateReq( pPkt->connectionHandle, &updateReq, bleMesh_TaskID );
-    }
-    break;
-        #endif /* 0 */
+      case GAP_LINK_PARAM_UPDATE_EVENT:
+      {
+          gapLinkUpdateEvent_t* pPkt = (gapLinkUpdateEvent_t*)pMsg;
+          l2capParamUpdateReq_t updateReq;
+          uint16 timeout = GAP_GetParamValue( TGAP_CONN_PARAM_TIMEOUT );
+          printf("\r\n GAP_LINK_PARAM_UPDATE_EVENT received! \r\n");
+          updateReq.intervalMin = 0x28;
+          updateReq.intervalMax = 0x38;
+          updateReq.slaveLatency = 0;
+          updateReq.timeoutMultiplier = 0x0c80;
+          L2CAP_ConnParamUpdateReq( pPkt->connectionHandle, &updateReq, bleMesh_TaskID );
+      }
+      break;
+      #endif /* 0 */
 
     default:
-        break;
-    }
+      break;
+  }
 }
 
 bStatus_t BLE_gap_set_scan_params
-(
-    uint8_t scan_type,
-    uint16_t scan_interval,
-    uint16_t scan_window,
-    uint8_t scan_filterpolicy
-)
-{
-    GAP_SetParamValue( TGAP_GEN_DISC_SCAN_WIND, scan_window );
-    GAP_SetParamValue( TGAP_GEN_DISC_SCAN_INT, scan_interval );
-    GAP_SetParamValue( TGAP_FILTER_ADV_REPORTS, FALSE);
-    GAP_SetParamValue( TGAP_GEN_DISC_SCAN, 1000 );
-    GAP_SetParamValue( TGAP_CONN_SCAN_INT,scan_interval );
-    GAP_SetParamValue( TGAP_CONN_SCAN_WIND,scan_window);
-    //GAP_SetParamValue( TGAP_LIM_DISC_SCAN, 0xFFFF );
-    bleMesh_scanparam.activeScan = scan_type;
-    bleMesh_scanparam.mode = DEVDISC_MODE_ALL; //DEVDISC_MODE_GENERAL;
-    bleMesh_scanparam.whiteList = scan_filterpolicy;
-    bleMesh_scanparam.taskID = bleMesh_TaskID;
-    return 0x00;
+    (
+        uint8_t scan_type,
+        uint16_t scan_interval,
+        uint16_t scan_window,
+        uint8_t scan_filterpolicy
+    ) {
+  GAP_SetParamValue(TGAP_GEN_DISC_SCAN_WIND, scan_window);
+  GAP_SetParamValue(TGAP_GEN_DISC_SCAN_INT, scan_interval);
+  GAP_SetParamValue(TGAP_FILTER_ADV_REPORTS, FALSE);
+  GAP_SetParamValue(TGAP_GEN_DISC_SCAN, 1000);
+  GAP_SetParamValue(TGAP_CONN_SCAN_INT, scan_interval);
+  GAP_SetParamValue(TGAP_CONN_SCAN_WIND, scan_window);
+  //GAP_SetParamValue( TGAP_LIM_DISC_SCAN, 0xFFFF );
+  bleMesh_scanparam.activeScan = scan_type;
+  bleMesh_scanparam.mode = DEVDISC_MODE_ALL; //DEVDISC_MODE_GENERAL;
+  bleMesh_scanparam.whiteList = scan_filterpolicy;
+  bleMesh_scanparam.taskID = bleMesh_TaskID;
+  return 0x00;
 }
 
 
 bStatus_t BLE_gap_set_scan_enable
-(
-    uint8_t scan_enable
-)
-{
-    bStatus_t ret;
+    (
+        uint8_t scan_enable
+    ) {
+  bStatus_t ret;
 
-    if (0x00 != scan_enable)
-    {
-        ret = GAP_DeviceDiscoveryRequest(&bleMesh_scanparam);
+  if (0x00 != scan_enable) {
+    ret = GAP_DeviceDiscoveryRequest(&bleMesh_scanparam);
 
-        if (0 == ret)
-        {
-            bleMesh_DiscCancel = FALSE;
-            osal_set_event (bleMesh_TaskID, BLEMESH_GAP_SCANENABLED);
-        }
+    if (0 == ret) {
+      bleMesh_DiscCancel = FALSE;
+      osal_set_event(bleMesh_TaskID, BLEMESH_GAP_SCANENABLED);
     }
-    else
-    {
-        ret = GAP_DeviceDiscoveryCancel(bleMesh_TaskID);
+  } else {
+    ret = GAP_DeviceDiscoveryCancel(bleMesh_TaskID);
 
-        if ((0 == ret) ||(bleIncorrectMode == ret))
-        {
-            bleMesh_DiscCancel = TRUE;
-            osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10*1000);
-        }
+    if ((0 == ret) || (bleIncorrectMode == ret)) {
+      bleMesh_DiscCancel = TRUE;
+      osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10 * 1000);
     }
+  }
 
-    return ret;
+  return ret;
 }
 
 bStatus_t BLE_gap_set_adv_params
-(
-    uint8_t adv_type,
-    uint16_t adv_intervalmin,
-    uint16_t adv_intervalmax,
-    uint8_t adv_filterpolicy
-)
-{
-    GAP_SetParamValue( TGAP_GEN_DISC_ADV_INT_MIN, adv_intervalmin );
-    GAP_SetParamValue( TGAP_GEN_DISC_ADV_INT_MAX, adv_intervalmax );
-    GAP_SetParamValue( TGAP_GEN_DISC_ADV_MIN, 0);
-    bleMesh_advparam.channelMap = GAP_ADVCHAN_ALL;
-    bleMesh_advparam.eventType = adv_type;
-    bleMesh_advparam.filterPolicy = adv_filterpolicy;
-    bleMesh_advparam.initiatorAddrType = 0x00;
-    osal_memset(bleMesh_advparam.initiatorAddr, 0x00, B_ADDR_LEN);
-    return SUCCESS;
+    (
+        uint8_t adv_type,
+        uint16_t adv_intervalmin,
+        uint16_t adv_intervalmax,
+        uint8_t adv_filterpolicy
+    ) {
+  GAP_SetParamValue(TGAP_GEN_DISC_ADV_INT_MIN, adv_intervalmin);
+  GAP_SetParamValue(TGAP_GEN_DISC_ADV_INT_MAX, adv_intervalmax);
+  GAP_SetParamValue(TGAP_GEN_DISC_ADV_MIN, 0);
+  bleMesh_advparam.channelMap = GAP_ADVCHAN_ALL;
+  bleMesh_advparam.eventType = adv_type;
+  bleMesh_advparam.filterPolicy = adv_filterpolicy;
+  bleMesh_advparam.initiatorAddrType = 0x00;
+  osal_memset(bleMesh_advparam.initiatorAddr, 0x00, B_ADDR_LEN);
+  return SUCCESS;
 }
 
 bStatus_t BLE_gap_set_advscanrsp_data
-(
-    uint8_t   type,
-    uint8_t* adv_data,
-    uint16_t  adv_datalen
-)
-{
-    return GAP_UpdateAdvertisingData(bleMesh_TaskID, type, adv_datalen, adv_data);
+    (
+        uint8_t type,
+        uint8_t *adv_data,
+        uint16_t adv_datalen
+    ) {
+  return GAP_UpdateAdvertisingData(bleMesh_TaskID, type, adv_datalen, adv_data);
 }
 
 bStatus_t BLE_gap_connect
-(
-    uint8_t   whitelist,
-    uint8_t* addr,
-    uint8_t   addr_type
-)
-{
-    gapEstLinkReq_t params;
-    params.taskID = bleMesh_TaskID;
-    params.highDutyCycle = TRUE;
-    params.whiteList = whitelist;
-    params.addrTypePeer = addr_type;
-    VOID osal_memcpy( params.peerAddr, addr, B_ADDR_LEN );
-    return GAP_EstablishLinkReq( &params );
+    (
+        uint8_t whitelist,
+        uint8_t *addr,
+        uint8_t addr_type
+    ) {
+  gapEstLinkReq_t params;
+  params.taskID = bleMesh_TaskID;
+  params.highDutyCycle = TRUE;
+  params.whiteList = whitelist;
+  params.addrTypePeer = addr_type;
+  VOID osal_memcpy(params.peerAddr, addr, B_ADDR_LEN);
+  return GAP_EstablishLinkReq(&params);
 }
 
-bStatus_t BLE_gap_disconnect(uint16_t   conn_handle)
-{
-    return GAP_TerminateLinkReq( bleMesh_TaskID, conn_handle, HCI_DISCONNECT_REMOTE_USER_TERM ) ;
+bStatus_t BLE_gap_disconnect(uint16_t conn_handle) {
+  return GAP_TerminateLinkReq(bleMesh_TaskID, conn_handle, HCI_DISCONNECT_REMOTE_USER_TERM);
 }
 
 bStatus_t BLE_gap_set_adv_enable
-(
-    uint8_t adv_enable
-)
-{
-    bStatus_t ret;
+    (
+        uint8_t adv_enable
+    ) {
+  bStatus_t ret;
 
-    if (0x00 != adv_enable)
-    {
-        ret = GAP_MakeDiscoverable(bleMesh_TaskID, &bleMesh_advparam);
-    }
-    else
-    {
-        ret = GAP_EndDiscoverable(bleMesh_TaskID);
-    }
+  if (0x00 != adv_enable) {
+    ret = GAP_MakeDiscoverable(bleMesh_TaskID, &bleMesh_advparam);
+  } else {
+    ret = GAP_EndDiscoverable(bleMesh_TaskID);
+  }
 
-    if(ret == 0)
-        osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10*1000);
+  if (ret == 0)
+    osal_start_timerEx(bleMesh_TaskID, BLEMESH_GAP_MSG_EVT, 10 * 1000);
 
-    return ret;
+  return ret;
 }
 
-void bleMesh_GAPMsg_Timeout_Process(void)
-{
-    UCHAR state;
-    UCHAR ret;
-    state = BLEBRR_GET_STATE();
+void bleMesh_GAPMsg_Timeout_Process(void) {
+  UCHAR state;
+  UCHAR ret;
+  state = BLEBRR_GET_STATE();
 
-    switch (state)
-    {
+  switch (state) {
     case BLEBRR_STATE_IN_SCAN_ENABLE:
-        break;
+      break;
 
     case BLEBRR_STATE_IN_SCAN_DISABLE:
-        ret = BLE_gap_set_scan_enable (0x00);
+      ret = BLE_gap_set_scan_enable(0x00);
 
-        if((ret == 0x12) && (TRUE == bleMesh_DiscCancel))
-        {
-            bleMesh_DiscCancel = FALSE;
-            blebrr_handle_evt_scan_complete(0);
-        }
+      if ((ret == 0x12) && (TRUE == bleMesh_DiscCancel)) {
+        bleMesh_DiscCancel = FALSE;
+        blebrr_handle_evt_scan_complete(0);
+      }
 
-        break;
+      break;
 
     case BLEBRR_STATE_IN_ADV_ENABLE:
-        ret = BLE_gap_set_adv_enable(0x01);
+      ret = BLE_gap_set_adv_enable(0x01);
 
-        if(ret == 0x11)
-            blebrr_handle_evt_adv_complete(1);
+      if (ret == 0x11)
+        blebrr_handle_evt_adv_complete(1);
 
-        break;
+      break;
 
     case BLEBRR_STATE_IN_ADV_DISABLE:
-        ret = BLE_gap_set_adv_enable(0x00);
+      ret = BLE_gap_set_adv_enable(0x00);
 
-        if(ret == 0x12)
-            blebrr_handle_evt_adv_complete(0);
+      if (ret == 0x12)
+        blebrr_handle_evt_adv_complete(0);
 
-        break;
+      break;
 
     default :
-        break;
-    }
+      break;
+  }
 }
 
-static void ProcessUartData(uart_Evt_t* evt)
-{
-    UCHAR c_len = cmdlen + evt->len;
+static void ProcessUartData(uart_Evt_t *evt) {
+  UCHAR c_len = cmdlen + evt->len;
 
-    if(c_len < sizeof(cmdstr))
-    {
-        osal_memcpy((cmdstr + cmdlen), evt->data, evt->len);
-        cmdlen += evt->len;
-        osal_set_event( bleMesh_TaskID, BLEMESH_UART_RX_EVT );
-    }
-    else
-    {
-        cmdlen = 0;
-    }
+  if (c_len < sizeof(cmdstr)) {
+    osal_memcpy((cmdstr + cmdlen), evt->data, evt->len);
+    cmdlen += evt->len;
+    osal_set_event(bleMesh_TaskID, BLEMESH_UART_RX_EVT);
+  } else {
+    cmdlen = 0;
+  }
 }
 
-void bleMesh_uart_init(void)
-{
-    hal_uart_deinit(UART0);
-    uart_Cfg_t cfg =
-    {
-        .tx_pin = P9,
-        .rx_pin = P10,
-        .rts_pin = GPIO_DUMMY,
-        .cts_pin = GPIO_DUMMY,
-        .baudrate = 115200,
-        .use_fifo = TRUE,
-        .hw_fwctrl = FALSE,
-        .use_tx_buf = FALSE,
-        .parity     = FALSE,
-        .evt_handler = ProcessUartData,
-    };
-    hal_uart_init(cfg,UART0);//uart init
+void bleMesh_uart_init(void) {
+  hal_uart_deinit(UART0);
+  uart_Cfg_t cfg =
+      {
+          .tx_pin = P9,
+          .rx_pin = P10,
+          .rts_pin = GPIO_DUMMY,
+          .cts_pin = GPIO_DUMMY,
+          .baudrate = 115200,
+          .use_fifo = TRUE,
+          .hw_fwctrl = FALSE,
+          .use_tx_buf = FALSE,
+          .parity     = FALSE,
+          .evt_handler = ProcessUartData,
+      };
+  hal_uart_init(cfg, UART0);//uart init
 }
 
 /*********************************************************************
