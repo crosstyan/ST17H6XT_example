@@ -30,31 +30,25 @@ FILE __stdin;
 /* --------------------------------------------- Exported Global Variables */
 
 /* --------------------------------------------- Function */
-void EM_enter_sleep_pl(void)
-{
-}
+void EM_enter_sleep_pl(void) {}
 
-void EM_exit_sleep_pl(void)
-{
-}
+void EM_exit_sleep_pl(void) {}
 
-int fputc(int c, FILE* f)
-{
+int fputc(int c, FILE* f) {
     return hal_uart_send_buff(UART0,(uint8_t*)&c, 1);
 }
 
 
-int fgetc(FILE* f)
-{
+int fgetc(FILE* f) {
     return 0;
 }
 
 
-int ferror(FILE* f)
-{
-    /* Your implementation of ferror */
+/*
+int ferror(FILE* f) {
     return EOF;
 }
+*/
 
 
 void _ttywrch(int c)

@@ -16,6 +16,7 @@
 
 /* ========================= Include File Section ========================= */
 #include "btypes.h"
+#include <stdint.h>
 
 /* ====================== Macro Declaration Section ======================= */
 
@@ -57,7 +58,7 @@ void convert_to_lsb(u8* bytes, u8 len);
 #ifdef USE_32BIT_PROC
     typedef s64 SIGNED_BIG_DIGIT;
     typedef u64 UNSIGNED_BIG_DIGIT;
-    typedef u32 DIGIT_S;
+    typedef uint32_t DIGIT_S;
 #else /* USE_32BIT_PROC */
     typedef s32 SIGNED_BIG_DIGIT;
     typedef u32 UNSIGNED_BIG_DIGIT;

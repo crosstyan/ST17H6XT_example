@@ -46,7 +46,8 @@ static MS_VENDORMODEL_SERVER_CB       vendormodel_server_UI_cb;
 
     \return API_SUCCESS or an error code indicating reason for failure
 */
-__ATTR_SECTION_XIP__ API_RESULT MS_vendormodel_server_state_update
+// __ATTR_SECTION_XIP__ 
+API_RESULT MS_vendormodel_server_state_update
 (
     /* IN */ MS_ACCESS_MODEL_REQ_MSG_CONTEXT*      ctx,
     /* IN */ MS_ACCESS_VENDORMODEL_STATE_PARAMS*     current_state_params,
@@ -138,7 +139,8 @@ __ATTR_SECTION_XIP__ API_RESULT MS_vendormodel_server_state_update
     \param [in] data_param    Data associated with the event if any or NULL.
     \param [in] data_len      Size of the event data. 0 if event data is NULL.
 */
-__ATTR_SECTION_XIP__ API_RESULT vendormodel_server_cb
+// __ATTR_SECTION_XIP__ 
+API_RESULT vendormodel_server_cb
 (
     /* IN */ MS_ACCESS_MODEL_HANDLE* handle,
     /* IN */ MS_NET_ADDR              saddr,
@@ -297,7 +299,8 @@ __ATTR_SECTION_XIP__ API_RESULT vendormodel_server_cb
 
     \return API_SUCCESS or an error code indicating reason for failure
 */
-__ATTR_SECTION_XIP__ API_RESULT MS_vendormodel_server_init
+// __ATTR_SECTION_XIP__ 
+API_RESULT MS_vendormodel_server_init
 (
     /* IN */    MS_ACCESS_ELEMENT_HANDLE    element_handle,
     /* INOUT */ MS_ACCESS_MODEL_HANDLE*       model_handle,

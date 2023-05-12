@@ -124,7 +124,7 @@ static MS_PS_RECORDS ms_ps_records[] =
 
 /* Nonvolatile storage handle */
 static NVSTO_HANDLE access_nvsto_handle;
-static UINT8   ms_ps_store_disable_flag = 0;
+uint8_t   ms_ps_store_disable_flag = 0;
 
 
 UINT8   ms_ps_count;
