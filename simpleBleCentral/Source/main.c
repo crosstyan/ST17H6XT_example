@@ -99,13 +99,6 @@ ALIGN4_U8       g_largeHeap[LARGE_HEAP_SIZE];
 volatile uint8 g_clk32K_config;
 volatile sysclk_t g_spif_clk_config;
 
-
-/*********************************************************************
-    EXTERNAL VARIABLES
-*/
-extern uint32_t  __initial_sp;
-
-
 static void hal_low_power_io_init(void)
 {
     //========= pull all io to gnd by default
