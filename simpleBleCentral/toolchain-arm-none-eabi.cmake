@@ -71,10 +71,15 @@ set(CMAKE_ASM_FLAGS "${OBJECT_GEN_FLAGS} -x assembler-with-cpp " CACHE INTERNAL 
 # -Wl,--gc-sections     Perform the dead code elimination.
 # --specs=nano.specs    Link with newlib-nano.
 # --specs=nosys.specs   No syscalls, provide empty implementations for the POSIX system calls.
+# -n
+#     Turn off page alignment of sections, and disable linking
+#     against shared libraries.  If the output format supports Unix
+#     style magic numbers, mark the output as "NMAGIC".
+#     https://stackoverflow.com/questions/66721383/why-does-arm-none-eabi-ld-align-program-headers-to-64kib-when-linking-how-do-i
 #
 # linker script is set here
 # to link symbols (--just-symbols) you just need to append the symbols file to linker
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections --specs=nosys.specs --specs=nano.specs -mabi=aapcs -Wl,-Map=\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map\" -mcpu=cortex-m0 -mthumb -T ${CMAKE_SOURCE_DIR}/gcc_arm.ld  \"${SDK_DIRECTORY}/misc/bb_rom_sym_m0.gdbsym\"" CACHE INTERNAL "Linker options")
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections --specs=nosys.specs --specs=nano.specs -mabi=aapcs -Wl,-Map=\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map\" -mcpu=cortex-m0 -mthumb -n -T ${CMAKE_SOURCE_DIR}/gcc_arm.ld  \"${SDK_DIRECTORY}/misc/bb_rom_sym_m0.gdbsym\"" CACHE INTERNAL "Linker options")
 
 #---------------------------------------------------------------------------------------
 # Set debug/release build configuration Options
